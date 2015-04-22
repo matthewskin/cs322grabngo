@@ -30,7 +30,13 @@ ul {
 	width: 100%;
 	height: 100px;
 
+	position: relative;
+	z-index: 1;
+
 	background-color: #502D7F;
+	-webkit-box-shadow: 0px 2px 5px 0px rgba(0,0,0,0.75);
+	-moz-box-shadow: 0px 2px 5px 0px rgba(0,0,0,0.75);
+	box-shadow: 0px 2px 5px 0px rgba(0,0,0,0.75);
 
 	font-family: 'Raleway',sans-serif;
 	overflow: hidden;
@@ -49,6 +55,9 @@ ul {
 #content {
 	width: 980px;
 	height: 100%;
+
+	position: relative;
+	z-index: 0;
 
 	margin: auto;
 	padding: 5px;
