@@ -167,7 +167,24 @@ ul {
 }
 
 #content #column-left #items-list .item-display {
-	
+	height: 40px;
+}
+
+#content #column-left #items-list .item-display p {
+	float: left;
+	height: 22px;
+	padding: 10px 0 0 5px;
+}
+
+#content #column-left #items-list .item-display #item-name {	
+	width: 200px;
+	margin: auto;
+}
+
+#content #column-left #items-list .item-display #item-points {
+	width: 20px;
+	margin: auto;
+	text-align: center;
 }
 
 #content #column-left #items-list .item-display:hover {
@@ -177,12 +194,19 @@ ul {
 
 #content #column-left #items-list .item-info {
 	display: none;
-	padding-left: 15px;	
+	padding: 15px;	
+
+	background-color: rgba(232, 232, 232, 0.4);
 }
 
 #content #column-left #items-list .item-info p{
+	width: 100%;
 	padding: 0px;
 	margin: 0px;
+}
+
+#content #column-left #items-list .item-info #allergen-info {
+	text-align: right;
 }
 
 #content #column-left #locations-list {
@@ -194,7 +218,7 @@ ul {
 	width: 292px;
 	height: 100%;
 
-	padding: 4px;
+	padding: 6px;
 
 	float:left;
 
@@ -205,9 +229,34 @@ ul {
 	box-sizing: border-box;         /* Opera/IE 8+ */
 }
 
+#content #column-right h6 {
+	text-decoration: underline;
+	text-align: center;
+	font-size: 14px;
+	margin: 0 0 15px 0;
+}
+
 #content #column-right input {
-	margin-top: 5px;
-	width: 150px;
+	margin: 5px 0 0 3px;
+	height: 28px;
+	padding: 2px;
+	width: 200px;
+
+
+}
+
+#content #column-right select {
+	margin: 5px 0 0 3px;
+}
+
+#content #column-right #submit-button {
+	width: 80px;
+	margin-left: 0;
+	margin: 10px 0 -10px 0; 
+}
+
+#content #column-right p {
+	margin: 3px 0 0 0;
 }
 
 #content #column-right #add-item {
@@ -252,11 +301,9 @@ ul {
 	border-top-right-radius: 3px;
 }
 
-#content #column-right h6 {
-	text-decoration: underline;
-	text-align: center;
-	font-size: 12px;
-	margin: 0px;
+#content #column-right #horizontal-clear {
+	border-top: 1px solid #E6E6E6;
+
 }
 
 #content #clear-vertical {
@@ -265,3 +312,4 @@ ul {
 
 	border-left: 3px solid #E6E6E6;
 }
+

@@ -32,16 +32,18 @@
                 ?>
                     <div class="item">
                         <div class="item-display">
-                            <p id="item-name"><?php echo $row["item_name"]; ?></p>                       
+                            <p id="item-name"><?php echo $row["item_name"]; ?></p>  
+                            <p id="item-points"><?php echo $row["item_point_value"]; ?></p>                       
                         </div>
 
                         <div class="item-info">
                             <p><?php echo $row["item_desc"]; ?></p><br>
+                            <p id="allergen-info"><?php echo $row["item_allergen_info"]; ?></p><br>
                             <form action="execute.php" method="post">
-                            <input type="hidden" name="item-id" value="<?php echo $row["item_pk"]; ?>">
-                            <input type="hidden" name="mode" value="delete-item">
-                            <input type="submit" value="Delete Item">
-                    </form>
+                                <input type="hidden" name="item-id" value="<?php echo $row["item_pk"]; ?>">
+                                <input type="hidden" name="mode" value="delete-item">
+                                <input type="submit" value="Delete Item">
+                            </form>
                         </div>
                     </div>
                 <?php
@@ -60,14 +62,34 @@
             <div id="column-right">
                 <div id="add-item">
                     <h6>Add An Item</h6>
-
+                    <div id="horizontal-clear"></div>
                     <form action="execute.php" method="post">
-                    Item Name: <input type="text" name="item-name"><br>
-                    Description: <input type="text" name="item-desc"><br>
                     <input type="hidden" name="mode" value="add-item">
-                    <input type="submit" value="Add Item">
+                    <p>Item Name</p><input type="text" name="item-name"><br>
+                    <p>Description</p><input type="text" name="item-desc"><br>                    
+                    <p>Point Value</p>
+                    <select name="point-value">
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                        <option value="6">6</option>
+                        <option value="7">7</option>
+                        <option value="8">8</option>
+                        <option value="9">9</option>
+                        <option value="10">10</option>
+                        <option value="11">11</option>
+                        <option value="12">12</option>
+                        <option value="13">13</option>
+                        <option value="14">14</option>
+                        <option value="15">15</option>
+                        <option value="16">16</option>
+                    </select><br>
+                    <p>Allergen Information</p><input type="text" id="allergen-info" name="allergen-info" value="Contains: "><br>
+                    <input id="submit-button" type="submit" value="Add Item">
                     </form>
-
+                    <div id="horizontal-clear"></div>
                 </div>
 
                 <div id="add-location">
