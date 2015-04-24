@@ -16,3 +16,21 @@ function changeTab(mode){
 	}
 }
 
+function executePHP(functionName, argumentArray){
+	JQuery.ajax({
+		type: "POST",
+		url: "jsapi.php",
+		dataType: "json",
+
+		data: {functionname: functionName, arguments: argumentArray},
+
+	    success: function (obj, textstatus) {
+			if( !('error' in obj) ) {
+			  yourVariable = obj.result;
+			}
+			else {
+			  console.log(obj.error);
+			}
+        }
+	});	
+}
