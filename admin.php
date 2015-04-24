@@ -24,7 +24,7 @@
                     <?php
                     $result = getItems();
                     if($result == false){
-                        die("No items found.");
+                        break;
                     }          
                     $count = 0;
                     //Loop through all results
@@ -54,6 +54,61 @@
 
                 <div id="locations-list">
                     <h5>Locations</h5>
+                    <?php
+                    $result = getLocations();
+                    if($result == false){
+                        break;
+                    }          
+                    $count = 0;
+                    //Loop through all results
+                    while ($row = $result->fetch_assoc()) {
+                ?>
+                    <div class="location">
+                        <div class="location-display">
+                            <p id="location-name"><?php echo $row["location_name"]; ?></p>  
+                            <input type="time" readonly="readonly" value="<?php echo $row["location_time_open"]; ?>"> to
+                            <input type="time" readonly="readonly" value="<?php echo $row["location_time_closed"]; ?>">               
+                        </div>
+
+                        <div class="location-info">
+                            <p><?php echo $row["location_info"]; ?></p><br>
+                            
+                            <form action="execute.php" method="post">
+                                <input type="hidden" name="location-id" value="<?php echo $row["location_pk"]; ?>">
+                                <input type="hidden" name="mode" value="delete-location">
+                                <input type="submit" value="Delete Location">
+                            </form>
+                            <div id="items-list">
+                            <?php 
+                                $location_items = getLocationItems($row["location_pk"]);
+                                if($location_items == false){
+                                    ;
+                                } else {
+                                $inner_count = 0;
+                                //Loop through all results
+                                while ($inner_row = $location_items->fetch_assoc()){
+                            ?>
+                                <div id="location-item">
+                                    <?php echo $inner_row["item_name"]; ?>
+                                    <form action="execute.php" method="post">
+                                        <input type="hidden" name="location-id" value="<?php echo $row["location_pk"]; ?>">
+                                        <input type="hidden" name="item-id" value="<?php echo $row_inner["item_pk"]; ?>">
+                                        <input type="hidden" name="mode" value="delete-location-item">
+                                        <input type="submit" value="Delete Location">
+                                    </form>
+                                </div>
+                            <?php
+                                    }
+                                }
+                                $inner_count = $inner_count + 1;
+                            ?>
+                            </div>
+                        </div>
+                    </div>
+                <?php
+                    }
+                    $count = $count + 1;                        
+                ?>
                 </div>
             </div>
 
@@ -94,17 +149,38 @@
 
                 <div id="add-location">
                     <h6>Add A Location</h6>
-                    
+                    <div id="horizontal-clear"></div>
+                    <form action="execute.php" method="post">
+                    <input type="hidden" name="mode" value="add-location">
+                    <p>Location Name</p><input type="text" name="location-name"><br>
+                    <p>Location Hours</p><input type="time" id="location-open-time" value="07:30:00" name="location-open-time">
+                    to<input type="time" id="location-close-time" value="14:30:00" name="location-close-time"><br>                    
+                    <p>Additional Information</p><input type="text" name="location-info"><br>
+                    <input id="submit-button" type="submit" value="Add Location">
+                    </form>
+                    <div id="horizontal-clear"></div>                    
                 </div>             
             </div>
         </div>
 
     </body>
-
+    <?php
+        if($_GET["mode"] == "locations"){
+    ?>
+        <script>
+            changeTab('Location');
+        </script>
+    <?php
+        }
+    ?>
     <script>
         $(document).ready(function() {
             $(".item-display").click(function(event) {
                 $(this).parent().children(".item-info").slideToggle("100");
+            });
+
+            $(".location-display").click(function(event) {
+                $(this).parent().children(".location-info").slideToggle("100");
             });
         });         
     </script>
