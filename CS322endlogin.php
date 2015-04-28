@@ -16,7 +16,7 @@
 	
 	if (isValidLogin($conn, $user, $pass, $type)) {
 		if ($type == student) {
-			header("Location: template2.php");
+			header("Location: student.php");
 		} else if ($type == admin){
 			header("Location: admin.php");
 		} else {
