@@ -1,5 +1,8 @@
 
 
+
+
+
 function changeTab(mode){
 	if(mode === "Item"){
 		$("#content #column-right #add-location").hide(0);
@@ -16,21 +19,30 @@ function changeTab(mode){
 	}
 }
 
-function executePHP(functionName, argumentArray){
-	JQuery.ajax({
+function executePHP(argumentArray){
+	jQuery.ajax({
 		type: "POST",
 		url: "jsapi.php",
 		dataType: "json",
 
-		data: {functionname: functionName, arguments: argumentArray},
+		data: argumentArray,
 
-	    success: function (obj, textstatus) {
-			if( !('error' in obj) ) {
-			  yourVariable = obj.result;
-			}
-			else {
-			  console.log(obj.error);
-			}
-        }
+	    success: function (response) {			
+			returnVar = response;
+			console.log(returnVar);
+		}		
 	});	
 }
+
+function jsAddItem(formDataInput){
+	var json = {};
+
+	jQuery.each(formDataInput, function() {
+		json[this.name] = this.value || '';
+	});
+
+	console.log(json);
+	executePHP(json);
+}
+
+

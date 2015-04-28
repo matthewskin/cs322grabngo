@@ -317,6 +317,12 @@ ul {
 	margin: 10px 0 -10px 0; 
 }
 
+#content #column-right #add-item-submit {
+	width: 85px;
+	margin-left: 0;
+	margin: 10px 0 -10px 0; 
+}
+
 #content #column-right p {
 	margin: 3px 0 0 0;
 }
