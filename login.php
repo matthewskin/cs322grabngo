@@ -1,12 +1,12 @@
 <?php
-	require_once("CS322dbutils.php");
+	require_once("dbutils.php");
 	require_once("header.php");
 ?>
 
 			
 			<div id="login">
 				<h1>Grab & Go Login</h1>
-				<form action='CS322endlogin.php' method='post'>
+				<form action='endlogin.php' method='post'>
 					<div id="login-form">						
 						Login as: 
 						<input id='101' type='radio' name='logintype' value='admin'><label for='101'>Administrator</label>

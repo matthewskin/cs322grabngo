@@ -14,7 +14,7 @@
                 <ul>
                   <li><a id="menu-button-item" onclick="changeTab('Item'); return false;" href="">Items</a></li>
                   <li><a id="menu-button-location" onclick="changeTab('Location'); return false;" href="">Locations</a></li>
-                  <li id="menu-button-logout"><a href="">Logout</a></li>
+                  <li id="menu-button-logout"><a href="login.php">Logout</a></li>
                 </ul>
             </div>
 

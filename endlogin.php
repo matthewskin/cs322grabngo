@@ -1,7 +1,7 @@
 <?php
-	require_once("CS322pageutils.php");
-	require_once("CS322dbutils.php");
-	require_once("CS322loginutils.php");
+	require_once("pageutils.php");
+	require_once("dbutils.php");
+	require_once("loginutils.php");
 	$conn = connect();
 
 	$user = $_POST["username"];
@@ -25,7 +25,7 @@
 		}
 	} else {
 
-		header("Location: CS322login.php?login=invalid");
+		header("Location: login.php?login=invalid");
 	}
 	createHeader("End Login", false, false);
 

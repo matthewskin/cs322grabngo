@@ -41,7 +41,7 @@ function createHeader($title, $includeLogout = true, $extra = "") {
 		}
 		
 		echo "
-					<a href='CS322login.php'>Back to Login</a>
+					<a href='login.php'>Back to Login</a>
 					</footer>
 				</body>
 			</html>

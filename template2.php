@@ -4,8 +4,8 @@
 	This page serves a template for other pages
 !-->
 <?php
-	require_once("CS322dbutils.php");
-	require_once("CS322loginutils.php");
+	require_once("dbutils.php");
+	require_once("loginutils.php");
 	$conn = connect();
 	
 	if (!isCookieValidLogin($conn)) {

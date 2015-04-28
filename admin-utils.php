@@ -4,19 +4,11 @@
     Matt Skinner
     */
 
-    require_once("CS322dbutils.php");
+    require_once("dbutils.php");
 
 
 
     /*----------------------------------------------------Functions-----------------------------------------------------------*/
-
-    function getConnection(){
-        if(isset($GLOBALS["dbconnection"])){
-            return $GLOBALS["dbconnection"];
-        } else {
-            die("Database connection does not exist.");
-        }
-    }
 
     function executeQuery($statement){
         $conn = getConnection();
