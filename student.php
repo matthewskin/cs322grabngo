@@ -32,6 +32,7 @@
                         die("No items found.");
                     }          
                     $count = 0;
+					// Change...
                     //Loop through all results
                     while ($row = $result->fetch_assoc()) {
                 ?>
