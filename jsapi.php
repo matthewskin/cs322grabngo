@@ -4,14 +4,6 @@
 
     /*----------------------------------------------------Helper Functions-----------------------------------------------------*/
 
-    function getConnection(){
-        if(isset($GLOBALS["dbconnection"])){
-            return $GLOBALS["dbconnection"];
-        } else {
-            die("Database connection does not exist.");
-        }
-    }
-
     function executeQuery($statement){
         $conn = getConnection();
 
