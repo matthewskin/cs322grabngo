@@ -15,12 +15,16 @@
         return $result;
     }
 
+    function getInsertedID(){
+    	$conn = getConnection();
+    	return $conn->insert_id;
+    }
+
     function returnJSONResult($result){
-    	// $rows = array();
-    	// while($row = $result->fetch_assoc()){
-    	// 	$rows["row"][] = $row;
-    	// }
-    	$rows = array("status" => "SUCCESS", "message" => $result);
+		$rows = array();
+		while($row = $result->fetch_assoc()){
+			$rows[] = $row;
+		}
     	print json_encode($rows);
     }
 
@@ -46,6 +50,7 @@
   //   }
 
     function addItem(){
+
     	$executeQuery = 1;
 
 		$item_name = mysql_escape_string ($_POST["item-name"]);
@@ -70,11 +75,18 @@
 
 			if($result == false){
 				returnJSONError("Unable to add item. Server Error. " . $GLOBALS["dbconnection"]->error);
+				return false;
 			} else {
-				returnJSONResult($result);
+				//Get the pk of the inserted element and grab it.
+				$item_id = getInsertedID();
+				$item = executeQuery("SELECT * FROM items WHERE item_pk = " . $item_id);
+				//Return new item to JS.
+				returnJSONResult($item);
+				return true;
 			}
 		} else {
 			returnJSONError("Unable to add item. Invalid Input.");
+			return false;
 		}
 
 		return false;

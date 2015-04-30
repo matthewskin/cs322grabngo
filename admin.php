@@ -21,6 +21,7 @@
             <div id="column-left">
                 <div id="items-list">
                     <h5>Items</h5>
+                    <div id="new-items"></div>
                     <?php
                     $result = getItems();
                     if($result == false){
@@ -118,7 +119,7 @@
                 <div id="add-item">
                     <h6>Add An Item</h6>
                     <div id="horizontal-clear"></div>
-                    <form id="add-item-form" method="post">
+                    <form id="add-item-form">
                         <input type="hidden" name="endpoint" value="add-item">
                         <p>Item Name</p><input type="text" name="item-name"><br>
                         <p>Description</p><input type="text" name="item-desc"><br>                    
@@ -142,7 +143,7 @@
                             <option value="16">16</option>
                         </select><br>
                         <p>Allergen Information</p><input type="text" id="allergen-info" name="allergen-info" value="Contains: "><br>
-                        <input id="submit-button" type="submit" value="Add Item">
+                        <input id="submit-button" type="button" onclick="return submitAddItemForm()" value="Add Item">
                     </form>
                     <div id="horizontal-clear"></div>
                 </div>
@@ -176,17 +177,13 @@
     
     <script>
         $(document).ready(function() {
-            $(".item-display").click(function(event) {
+            $(document).on("click", ".item-display", function(event) {
                 $(this).parent().children(".item-info").slideToggle("100");
                 return false;
             });
 
-            $(".location-display").click(function(event) {
+            $(document).on("click", ".location-display", function(event) {
                 $(this).parent().children(".location-info").slideToggle("100");
-                return false;
-            });
-            $("#add-item-form").on('submit', function() {
-                jsAddItem($(this).serializeArray());
                 return false;
             });
         });
