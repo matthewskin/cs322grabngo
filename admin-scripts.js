@@ -47,7 +47,7 @@ function addToItemList(items, mode){
 		//console.log(item_div);
 		
 		if(mode === "new-item"){
-        	$("#new-items").append(item_div);
+        	$("#loaded-items").prepend(item_div);
         } else if (mode === "loaded-items"){
         	$("#loaded-items").append(item_div);
         }
@@ -86,7 +86,7 @@ function addToLocationList(locations, mode){
 		//console.log(item_div);
 		
 		if(mode === "new-location"){
-        	$("#new-locations").append(location_div);
+        	$("#loaded-locations").prepend(location_div);
         } else if (mode === "loaded-locations"){
         	$("#loaded-locations").append(location_div);
         }
