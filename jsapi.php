@@ -51,11 +51,18 @@
 
     }
 
-  //   function listLocations(){
-  //   	$statement = "SELECT * from locations ORDER BY locations.location_name";
-  //   	$result executeQuery($statement);
-		// returnJSONResult($result);
-  //   }
+    function listLocations(){
+    	$statement = "SELECT * from locations ORDER BY locations.location_name";
+    	$result = executeQuery($statement);
+
+    	if($result == false){
+			returnJSONError("Unable to fetch locations. Server Error. " . $GLOBALS["dbconnection"]->error);
+			return false;
+		} else {
+			returnJSONResult($result);
+			return true;
+		}
+    }
 
     function addItem(){
 
@@ -100,25 +107,47 @@
 		return false;
     }
 
-  //   function addLocation(){
+    function addLocation(){
 
+    	$executeQuery = 1;
 
+		$location_name = htmlspecialchars(mysql_escape_string ($_POST["location-name"]));
+		$location_open_time = htmlspecialchars(mysql_escape_string ($_POST["location-open-time"]));
+		$location_close_time = $_POST["location-close-time"];
+		$location_info = htmlspecialchars(mysql_escape_string ($_POST["location-info"]));
 
-  //   	if($executeQuery == 1){
-		// 	$statement = "INSERT INTO locations (location_name, location_time_open, location_time_closed, location_info) 
-		// 		OUTPUT Inserted.* 
-		// 		VALUES ('" . $location_name . "', '" . $location_open_time . 
-		// 			"', '" . $location_close_time . "', '" . $location_info . "')";
+		if(strlen(trim($location_name)) < 1){
+			$executeQuery = 0;
+		}
 
-		// 	$result = executeQuery($statement);
+		if(strlen($location_info) < 1){
+			$location_info = "No additional information.";
+		}
+		
+		if($executeQuery == 1){
+			$statement = "INSERT INTO locations (location_name, location_time_open, location_time_closed, location_info) 
+				VALUES ('" . $location_name . "', '" . $location_open_time . 
+					"', '" . $location_close_time . "', '" . $location_info . "')";
 
-		// 	if($result == false){
-		// 		returnJSONError("Unable to add location.");
-		// 	} else {
-		// 		returnJSONResult($result);
-		// 	}
-		// }
-  //   }
+			$result = executeQuery($statement);
+
+			if($result == false){
+				returnJSONError("Unable to add location. Server Error. " . $GLOBALS["dbconnection"]->error);
+				return false;
+			} else {
+				//Get the pk of the inserted element and grab it.
+				$location_id = getInsertedID();
+				$location = executeQuery("SELECT * FROM locations WHERE location_pk = " . $location_id);
+				//Return new item to JS.
+				returnJSONResult($location);
+				return true;
+			}
+		} else {
+			returnJSONError("Unable to add location. Invalid Input.");
+			return false;
+		}
+
+    }
 
     function deleteItem(){
 
