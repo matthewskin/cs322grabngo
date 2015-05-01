@@ -21,13 +21,11 @@
             <div id="column-left">
                 <div id="items-list">
                     <h5>Items</h5>
-                    <div id="new-items"></div>
                     <div id="loaded-items"></div>
                 </div>
 
                 <div id="locations-list">
                     <h5>Locations</h5>
-                    <div id="new-locations"></div>
                     <div id="loaded-locations"></div>                       
                 </div>
             </div>
