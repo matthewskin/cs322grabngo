@@ -37,11 +37,19 @@
     //http://docs.jquery.com/Ajax/jQuery.ajax
     //http://stackoverflow.com/questions/15757750/php-function-call-using-javascript
 
-  //   function listItems(){
-		// $statement = "SELECT * from items ORDER BY items.item_name";
-  //       $result executeQuery($statement);
-		// returnJSONResult($result);
-  //   }
+    function listItems(){
+		$statement = "SELECT * from items ORDER BY items.item_name";
+        $result = executeQuery($statement);
+
+        if($result == false){
+			returnJSONError("Unable to fetch items. Server Error. " . $GLOBALS["dbconnection"]->error);
+			return false;
+		} else {
+			returnJSONResult($result);
+			return true;
+		}
+
+    }
 
   //   function listLocations(){
   //   	$statement = "SELECT * from locations ORDER BY locations.location_name";

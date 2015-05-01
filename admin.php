@@ -22,35 +22,7 @@
                 <div id="items-list">
                     <h5>Items</h5>
                     <div id="new-items"></div>
-                    <?php
-                    $result = getItems();
-                    if($result == false){
-                        break;
-                    }          
-                    $count = 0;
-                    //Loop through all results
-                    while ($row = $result->fetch_assoc()) {
-                ?>
-                    <div class="item">
-                        <div class="item-display">
-                            <p id="item-name"><?php echo $row["item_name"]; ?></p>  
-                            <p id="item-points"><?php echo $row["item_point_value"]; ?></p>                       
-                        </div>
-
-                        <div class="item-info">
-                            <p><?php echo $row["item_desc"]; ?></p><br>
-                            <p id="allergen-info"><?php echo $row["item_allergen_info"]; ?></p><br>
-                            <form action="execute.php" method="post">
-                                <input type="hidden" name="item-id" value="<?php echo $row["item_pk"]; ?>">
-                                <input type="hidden" name="mode" value="delete-item">
-                                <input type="submit" value="Delete Item">
-                            </form>
-                        </div>
-                    </div>
-                <?php
-                    }
-                    $count = $count + 1;                        
-                ?>
+                    <div id="loaded-items"></div>
                 </div>
 
                 <div id="locations-list">
@@ -186,6 +158,9 @@
                 $(this).parent().children(".location-info").slideToggle("100");
                 return false;
             });
+            //List grab initial lists of items and locations
+            jsListItems();
+            //jsListLocations();
         });
     </script>
     
