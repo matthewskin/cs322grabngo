@@ -1,6 +1,15 @@
 var itemsList = {};
 var locationsList = {};
 
+function escapeHtml(unsafe) {
+    return unsafe
+         .replace(/&/g, "&amp;")
+         .replace(/</g, "&lt;")
+         .replace(/>/g, "&gt;")
+         .replace(/"/g, "&quot;")
+         .replace(/'/g, "&#039;");
+ }
+
 function changeTab(mode){
 	if(mode === "Item"){
 		$("#content #column-right #add-location").hide(0);

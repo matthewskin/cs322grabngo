@@ -149,6 +149,7 @@
     
     <script>
         $(document).ready(function() {
+
             $(document).on("click", ".item-display", function(event) {
                 $(this).parent().children(".item-info").slideToggle("100");
                 return false;

@@ -61,10 +61,10 @@
 
     	$executeQuery = 1;
 
-		$item_name = mysql_escape_string ($_POST["item-name"]);
-		$item_desc = mysql_escape_string ($_POST["item-desc"]);
+		$item_name = htmlspecialchars(mysql_escape_string ($_POST["item-name"]));
+		$item_desc = htmlspecialchars(mysql_escape_string ($_POST["item-desc"]));
 		$point_value = $_POST["point-value"];
-		$allergen_info = mysql_escape_string ($_POST["allergen-info"]);
+		$allergen_info = htmlspecialchars(mysql_escape_string ($_POST["allergen-info"]));
 
 		if(strlen(trim($item_name)) < 1){
 			$executeQuery = 0;
