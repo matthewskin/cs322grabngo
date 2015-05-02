@@ -173,12 +173,15 @@ ul {
 #content #column-left #items-list .item-display {
 	height: 40px;
 	background-color: #FFFFFF;
+
+	text-align:right;
 }
 
 #content #column-left #items-list .item-display p {
 	float: left;
 	height: 22px;
 	padding: 10px 0 0 5px;
+	text-align:left;
 }
 
 #content #column-left #items-list .item-display #item-name {	
@@ -190,6 +193,27 @@ ul {
 	width: 20px;
 	margin: auto;
 	text-align: center;
+}
+
+#content #column-left #items-list .item-display #item-special-diet {
+	width: 200px;
+	margin: auto;
+	text-align: center;
+	color: rgba(140, 140, 140, 0.5);
+	text-transform: capitalize;
+}
+
+#content #column-left #items-list .item-display .edit-pencil {
+	width: 20px;
+	height: 20px;
+	margin: 10px  auto;
+}
+
+#content #column-left #items-list .item-display .edit-pencil:hover {
+	width: 20px;
+	height: 20px;
+	margin: 10px  auto;
+	opacity: 0.6;
 }
 
 #content #column-left #items-list .item-display:hover {

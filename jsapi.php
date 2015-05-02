@@ -72,6 +72,7 @@
 		$item_desc = htmlspecialchars(mysql_escape_string ($_POST["item-desc"]));
 		$point_value = $_POST["point-value"];
 		$allergen_info = htmlspecialchars(mysql_escape_string ($_POST["allergen-info"]));
+		$special_diet = htmlspecialchars(mysql_escape_string ($_POST["item-special-diet"]));
 
 		if(strlen(trim($item_name)) < 1){
 			$executeQuery = 0;
@@ -83,8 +84,8 @@
 
 
     	if($executeQuery == 1){
-			$statement = "INSERT INTO items (item_name, item_desc, item_point_value, item_allergen_info) " . 
-				"VALUES ('" . $item_name . "', '" . $item_desc . "', '" . $point_value . "', '" . $allergen_info . "')";
+			$statement = "INSERT INTO items (item_name, item_desc, item_point_value, item_allergen_info, item_special_diet) " . 
+				"VALUES ('" . $item_name . "', '" . $item_desc . "', '" . $point_value . "', '" . $allergen_info . "', '" . $special_diet . "')";
 
 			$result = executeQuery($statement);
 

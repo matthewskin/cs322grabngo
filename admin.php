@@ -60,6 +60,12 @@
                             <option value="16">16</option>
                         </select><br>
                         <p>Allergen Information</p><input type="text" id="allergen-info" name="allergen-info" value="Contains: "><br>
+                        <p>Special Diet</p>
+                        <select name="item-special-diet">
+                            <option value="vegetarian">Vegetarian</option>
+                            <option value="vegan">Vegan</option>
+                            <option value="gluten free">Gluten Free</option>                            
+                        </select><br>
                         <input id="submit-button" type="button" onclick="return submitAddItemForm()" value="Add Item">
                     </form>
                     <div id="horizontal-clear"></div>
@@ -103,6 +109,11 @@
             $(document).on("click", ".location-display", function(event) {
                 $(this).parent().children(".location-info").slideToggle("100");
                 return false;
+            });
+
+            $(document).on("click", ".edit-pencil", function(event) {
+            	jsEditItem($(this).parent().parent().attr("id"));
+            	return false;
             });
             //List grab initial lists of items and locations
             jsListItems();

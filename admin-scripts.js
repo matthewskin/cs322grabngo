@@ -21,19 +21,28 @@ function addToItemList(items, mode){
 
 	console.log(items);
 
-	var htmlID = "item-" + this.item_pk;
-
 	$.each(items, function(){
+		var htmlID = "item-" + this.item_pk;
+		var specialDiet;
+
+		if(this.item_special_diet == null){
+			specialDiet = "";
+		} else {
+			specialDiet = this.item_special_diet;
+		}
+
 		if(mode === "new-item"){
 			var item_div = "<div class='item' id='" + htmlID + "' style='display:none'><div class='item-display'><p id='item-name'>" + 
-				this.item_name + "</p><p id='item-points'>" + this.item_point_value + 
-				"</p></div><div class='item-info'><p>" + this.item_desc + "</p><br><p id='allergen-info'>" + 
+				this.item_name + "</p><p id='item-points'>" + this.item_point_value + "</p><p id='item-special-diet'>" + specialDiet +
+				"</p><img src='./images/edit-pencil.png' alt='Edit' class='edit-pencil' /></div><div class='item-info'><p>" + 
+				this.item_desc + "</p><br><p id='allergen-info'>" + 
 				this.item_allergen_info + "</p><br><form action='execute.php' method='post'><input type='hidden' name='item-id' value='" + 
 				this.item_pk + "'><input type='hidden' name='mode' value='delete-item'><input type='submit' value='Delete Item'></form></div></div>";
 		} else {
 			var item_div = "<div class='item' id='" + htmlID + "'><div class='item-display'><p id='item-name'>" + 
-				this.item_name + "</p><p id='item-points'>" + this.item_point_value + 
-				"</p></div><div class='item-info'><p>" + this.item_desc + "</p><br><p id='allergen-info'>" + 
+				this.item_name + "</p><p id='item-points'>" + this.item_point_value + "</p><p id='item-special-diet'>" + specialDiet +
+				"</p><img src='./images/edit-pencil.png' alt='Edit' class='edit-pencil' /></div><div class='item-info'><p>" + 
+				this.item_desc + "</p><br><p id='allergen-info'>" + 
 				this.item_allergen_info + "</p><br><form action='execute.php' method='post'><input type='hidden' name='item-id' value='" + 
 				this.item_pk + "'><input type='hidden' name='mode' value='delete-item'><input type='submit' value='Delete Item'></form></div></div>";
 		}
@@ -46,7 +55,8 @@ function addToItemList(items, mode){
 		newItem["item_name"] = this.item_name;
 		newItem["item_point_value"] = this.item_point_value;
 		newItem["item_desc"] = this.item_desc; 
-		newItem["item_allergen_info"] = this.item_allergen_info; 
+		newItem["item_allergen_info"] = this.item_allergen_info;
+		newItem["item_special_diet"] = this.item_special_diet;
 		newItem["item_div"] = item_div;
 
 		itemsList[this.item_pk] = newItem;
@@ -69,9 +79,8 @@ function addToLocationList(locations, mode){
 
 	console.log(locations);
 
-	var htmlID = "location-" + this.location_pk;
-
 	$.each(locations, function(){
+		var htmlID = "location-" + this.location_pk;		
 
 		if(mode === "new-location"){
 			var location_div = "<div class='location' id='" + htmlID + "' style='display:none'><div class='location-display'><p id='location-name'>" + 
@@ -232,6 +241,12 @@ function submitAddItemForm(){
 //Serialize the location form and pass it to the add location handling function
 function submitAddLocationForm(){
 	jsAddLocation($("#add-location-form").serializeArray());
+	return false;
+}
+
+function jsEditItem(itemID){
+	itemID = itemID.split("-")[1];
+	alert(itemID);
 	return false;
 }
 
