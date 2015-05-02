@@ -182,10 +182,12 @@ ul {
 	height: 22px;
 	padding: 10px 0 0 5px;
 	text-align:left;
+	overflow:hidden;
+	text-overflow: ellipsis;
 }
 
 #content #column-left #items-list .item-display #item-name {	
-	width: 200px;
+	width: 310px;
 	margin: auto;
 }
 
@@ -196,7 +198,7 @@ ul {
 }
 
 #content #column-left #items-list .item-display #item-special-diet {
-	width: 200px;
+	width: 280px;
 	margin: auto;
 	text-align: center;
 	color: rgba(140, 140, 140, 0.5);

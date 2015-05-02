@@ -73,6 +73,9 @@
 		$point_value = $_POST["point-value"];
 		$allergen_info = htmlspecialchars(mysql_escape_string ($_POST["allergen-info"]));
 		$special_diet = htmlspecialchars(mysql_escape_string ($_POST["item-special-diet"]));
+		if($special_diet == "none"){
+			$special_diet = null;
+		}
 
 		if(strlen(trim($item_name)) < 1){
 			$executeQuery = 0;

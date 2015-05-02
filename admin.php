@@ -61,7 +61,8 @@
                         </select><br>
                         <p>Allergen Information</p><input type="text" id="allergen-info" name="allergen-info" value="Contains: "><br>
                         <p>Special Diet</p>
-                        <select name="item-special-diet">
+                        <select name="item-special-diet" value="">
+                        	<option selected value="none">None</option>
                             <option value="vegetarian">Vegetarian</option>
                             <option value="vegan">Vegan</option>
                             <option value="gluten free">Gluten Free</option>                            
