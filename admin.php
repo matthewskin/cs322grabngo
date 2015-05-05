@@ -113,11 +113,13 @@
             });
 
             $(document).on("click", ".edit-pencil", function(event) {
-            	jsEditItem($(this).parent().parent().attr("id"));
+            	//Use helper function to get the id of the surrounding div then pass it to the function
+            	var itemID = getItemID($(this), 10);
+            	jsEditItem(itemID);
             	return false;
             });
             //List grab initial lists of items and locations
-            jsListItems();
+            jsListItems("admin");
             jsListLocations();
         });
     </script>
