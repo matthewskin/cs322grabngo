@@ -153,6 +153,25 @@
 
     }
 
+    function listLocationItems(){
+    	$location_key = $_POST["location-pk"];
+
+    	$statement = "SELECT item_fk FROM itemlocationjoin WHERE location_fk = " . $location_key;
+        $result = executeQuery($statement);
+
+        if($result == false){
+			returnJSONError("Unable to fetch location-items. Server Error. " . $GLOBALS["dbconnection"]->error);
+			return false;
+		} else {
+			$rows = array();
+			while($row = $result->fetch_assoc()){
+				$rows[] = $row["item_fk"];
+			}
+			print json_encode($rows);
+			return true;
+		}
+    }
+
     function deleteItem(){
 
     }
@@ -168,6 +187,9 @@
 	        break;
 	    case "list-locations":
 	    	listLocations();
+	    	break;
+	    case "list-location-items":
+	    	listLocationItems();
 	    	break;
 	    case "add-item":
 	    	addItem();

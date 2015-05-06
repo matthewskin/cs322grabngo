@@ -86,9 +86,12 @@ function addToItemList(items, mode, user){
 //Add locations returned by the server to the page and global array
 function addToLocationList(locations, mode){
 
+	var locationKeys = [];
+
 	console.log(locations);
 
 	$.each(locations, function(){
+		locationKeys.push(this.location_pk);
 		var htmlID = "location-" + this.location_pk;		
 
 		if(mode === "new-location"){
@@ -105,10 +108,9 @@ function addToLocationList(locations, mode){
 	            this.location_info + "</p><br><form action='execute.php' method='post'><input type='hidden' name='location-id' value='" + 
 	            this.location_pk + "'><input type='hidden' name='mode' value='delete-location'>" +
 	            "<input type='submit' value='Delete Location'></form></div></div>";
-	    }
+	    }	    
 
 		//Create new object and store location in global array
-
 		newLocation = {};
 
 		newLocation["location_pk"] = this.location_pk;
@@ -119,18 +121,42 @@ function addToLocationList(locations, mode){
 		newLocation["location_div"] = location_div;
 
 		locationsList[this.location_pk] = newLocation;
-
-		//---------------------------------------
-
-		//console.log(item_div);
-		
+		//-------------------------------------------------
 		if(mode === "new-location"){
         	$("#loaded-locations").prepend(location_div);
         	$("#" + htmlID).slideDown(250);
         } else if (mode === "loaded-locations"){
         	$("#loaded-locations").append(location_div);
         }
+
     });
+	
+	//Need to do this in a separate function once everything has been created because Ajax is async.
+	getLocationsItems(locationKeys);
+}
+
+function getLocationsItems(locationKeys){
+	$.each(locationKeys, function(index, value) {
+		//Get the items associated with this location.
+	    var json = {"endpoint":"list-location-items", "location-pk":value};
+		
+		jQuery.ajax({
+			type: "POST",
+			url: "jsapi.php",
+			dataType: "json",
+
+			data: json,
+
+		    success: function (response) {
+		    	if(response["status"] === "ERROR"){
+		    		console.log(response);
+		    		alert(response["message"]);
+		    	} else {
+		    		locationsList[value]["items"] = response;
+		    	}
+			}		
+		});
+	});
 }
 
 //Send a request to the server to create and return an item
