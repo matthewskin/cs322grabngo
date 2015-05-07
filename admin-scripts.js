@@ -4,15 +4,21 @@ var locationsList = {};
 //Navigate between tabs (Show and hide divs)
 function changeTab(mode){
 	if(mode === "Item"){
-		$("#content #column-right #add-location").hide(0);
-		$("#content #column-left #locations-list").hide(0);
-		$("#content #column-right #add-item").show(0);
-		$("#content #column-left #items-list").show(0);
+		$("#content #column-right #add-location").slideUp(300, function(){
+			$("#content #column-right #add-item").slideDown(300);
+		});
+		$("#content #column-left #locations-list").slideUp(300, function(){
+			$("#content #column-left #items-list").slideDown(300);
+		});
+		//$("#content #column-right #add-item").show(0);
+		//$("#content #column-left #items-list").show(0);
 	} else if (mode === "Location"){
-		$("#content #column-right #add-location").show(0);
-		$("#content #column-left #locations-list").show(0);
-		$("#content #column-right #add-item").hide(0);
-		$("#content #column-left #items-list").hide(0);
+		$("#content #column-right #add-item").slideUp(300, function(){
+			$("#content #column-right #add-location").slideDown(300);
+		});
+		$("#content #column-left #items-list").slideUp(300, function(){
+			$("#content #column-left #locations-list").slideDown(300);
+		});
 	}
 }
 
@@ -22,7 +28,7 @@ function addToItemList(items, mode, user){
 	console.log(items);
 
 	$.each(items, function(){
-		var htmlID = "item-" + this.item_pk;
+		var htmlID = "item-key-" + this.item_pk;
 		var specialDiet;
 
 		if(this.item_special_diet == null){
@@ -34,10 +40,9 @@ function addToItemList(items, mode, user){
 		if(mode === "new-item"){
 			var item_div = "<div class='item' id='" + htmlID + "' style='display:none'><div class='item-display'><p id='item-name'>" + 
 				this.item_name + "</p><p id='item-points'>" + this.item_point_value + "</p><p id='item-special-diet'>" + specialDiet +
-				"</p><img src='./images/edit-pencil.png' alt='Edit' class='edit-pencil' /></div><div class='item-info'><p>" + 
+				"</p><img src='./images/edit-pencil.png' alt='Edit' class='edit-pencil-item' /></div><div class='item-info'><p>" + 
 				this.item_desc + "</p><br><p id='allergen-info'>" + 
-				this.item_allergen_info + "</p><br><form action='execute.php' method='post'><input type='hidden' name='item-id' value='" + 
-				this.item_pk + "'><input type='hidden' name='mode' value='delete-item'><input type='submit' value='Delete Item'></form></div></div>";
+				this.item_allergen_info + "</p><br></div></div>";
 		} else {
 			if(user === "student"){
 				var item_div = "<div class='item' id='" + htmlID + "'><div class='item-display'><p id='item-name'>" + 
@@ -48,10 +53,9 @@ function addToItemList(items, mode, user){
 			} else if(user === "admin"){
 				var item_div = "<div class='item' id='" + htmlID + "'><div class='item-display'><p id='item-name'>" + 
 					this.item_name + "</p><p id='item-points'>" + this.item_point_value + "</p><p id='item-special-diet'>" + specialDiet +
-					"</p><img src='./images/edit-pencil.png' alt='Edit' class='edit-pencil' /></div><div class='item-info'><p>" + 
+					"</p><img src='./images/edit-pencil.png' alt='Edit' class='edit-pencil-item' /></div><div class='item-info'><p>" + 
 					this.item_desc + "</p><br><p id='allergen-info'>" + 
-					this.item_allergen_info + "</p><br><form action='execute.php' method='post'><input type='hidden' name='item-id' value='" + 
-					this.item_pk + "'><input type='hidden' name='mode' value='delete-item'><input type='submit' value='Delete Item'></form></div></div>";
+					this.item_allergen_info + "</p><br></div></div>";
 			}	
 		}
 
@@ -92,22 +96,25 @@ function addToLocationList(locations, mode){
 
 	$.each(locations, function(){
 		locationKeys.push(this.location_pk);
-		var htmlID = "location-" + this.location_pk;		
+		var htmlID = "location-key-" + this.location_pk;		
 
 		if(mode === "new-location"){
 			var location_div = "<div class='location' id='" + htmlID + "' style='display:none'><div class='location-display'><p id='location-name'>" + 
-				this.location_name + "</p><input type='time' readonly='readonly' value='" + this.location_time_open + "'> to " + 
-	            "<input type='time' readonly='readonly' value='" + this.location_time_closed + "'></div><div class='location-info'><p>" + 
-	            this.location_info + "</p><br><form action='execute.php' method='post'><input type='hidden' name='location-id' value='" + 
-	            this.location_pk + "'><input type='hidden' name='mode' value='delete-location'>" +
-	            "<input type='submit' value='Delete Location'></form></div></div>";
+				this.location_name + "</p><div id='location-times'><input type='time' readonly='readonly' value='" + this.location_time_open + "'> to " + 
+	            "<input type='time' readonly='readonly' value='" + this.location_time_closed + 
+	            "'></div><img src='./images/edit-pencil.png' alt='Edit' class='edit-pencil-location' /></div>" +
+	            "<div class='location-info'><div id='location-info-desc'><p>" + 
+	            this.location_info + "</p></div><div id='location-info-items'></div>" + 
+	            "<div id='location-info-options'><img src='./images/delete-button.png' alt='Delete' class='delete-button-location' /></div></div></div>";
 	    } else {
 	    	var location_div = "<div class='location' id='" + htmlID + "'><div class='location-display'><p id='location-name'>" + 
-				this.location_name + "</p><input type='time' readonly='readonly' value='" + this.location_time_open + "'> to " + 
-	            "<input type='time' readonly='readonly' value='" + this.location_time_closed + "'></div><div class='location-info'><p>" + 
-	            this.location_info + "</p><br><form action='execute.php' method='post'><input type='hidden' name='location-id' value='" + 
-	            this.location_pk + "'><input type='hidden' name='mode' value='delete-location'>" +
-	            "<input type='submit' value='Delete Location'></form></div></div>";
+				this.location_name + "</p><div id='location-times'><input type='time' readonly='readonly' value='" + this.location_time_open + "'> to " + 
+	            "<input type='time' readonly='readonly' value='" + this.location_time_closed + 
+	            "'></div><img src='./images/edit-pencil.png' alt='Edit' class='edit-pencil-location' /></div>" + 
+	            "<div class='location-info'><div id='location-info-desc'><p>" + 
+	            this.location_info + "</p></div>" + 
+	            "<div id='location-info-options'><img src='./images/delete-button.png' alt='Delete' class='delete-button-location' /></div>" +
+	            "<p id='items-title'>Items</p><div id='location-info-items'></div></div></div>";
 	    }	    
 
 		//Create new object and store location in global array
@@ -153,6 +160,16 @@ function getLocationsItems(locationKeys){
 		    		alert(response["message"]);
 		    	} else {
 		    		locationsList[value]["items"] = response;
+		    		$.each(response, function(innerIndex, innerValue){
+		    			var itemKey = itemsList[innerValue].item_pk;
+		    			var itemName = itemsList[innerValue].item_name;
+		    			var itemPointValue = itemsList[innerValue].item_point_value;
+
+		    			var locationItemDiv = "<div class='location-item-display' id='item-key-" + itemKey + "'><div id='location-item-name'>"+ itemName +
+		    			"</div><div id='location-item-points'>" + itemPointValue + "</div></div>"
+
+		    			$("#location-key-" + value + " #location-info-items").append(locationItemDiv);
+		    		});
 		    	}
 			}		
 		});
@@ -288,19 +305,40 @@ function jsEditItem(itemID){
 	return false;
 }
 
+function jsEditLocation(locationID){
+	alert(locationID);
+	return false;
+}
+
+function jsDeleteItem(itemID){
+
+}
+
+function jsDeleteLocation(locationID){
+
+	alert(locationID);
+
+	return false;
+}
+
 var recursionCounter = 0;
-function getItemID(selector, recursionDepth){
-	var itemID = selector[0]["id"];
-	if(itemID.indexOf("item-") != -1){
-		itemID = itemID.split("-")[1];
-		return itemID;
+function getElementID(selector, recursionDepth, searchString){
+	console.log(selector);
+	var elementID = selector.attr("id");
+	if(elementID === undefined){
+		elementID = "";
+	}
+	if(elementID.indexOf(searchString) !== -1){
+		elementID = elementID.split("-")[2];
+		recursionCounter = 0;
+		return elementID;
 	} else {
 		if(recursionCounter < recursionDepth){
 			recursionCounter++;
-			return getItemID(selector.parent(), recursionDepth);
+			return getElementID(selector.parent(), recursionDepth, searchString);
 		} else {
 			recursionCounter = 0;
-			alert("The element clicked does not belong to an item.");
+			alert("The element clicked does not have an associated key.");
 			return false;
 		}
 	}

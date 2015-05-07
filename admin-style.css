@@ -205,16 +205,13 @@ ul {
 	text-transform: capitalize;
 }
 
-#content #column-left #items-list .item-display .edit-pencil {
+#content #column-left #items-list .item-display .edit-pencil-item {
 	width: 20px;
 	height: 20px;
 	margin: 10px  auto;
 }
 
-#content #column-left #items-list .item-display .edit-pencil:hover {
-	width: 20px;
-	height: 20px;
-	margin: 10px  auto;
+#content #column-left #items-list .item-display .edit-pencil-item:hover {
 	opacity: 0.6;
 }
 
@@ -261,18 +258,31 @@ ul {
 	background-color: #FFFFFF;
 }
 
+#content #column-left #locations-list .location-display #location-times {
+	display: inline-block;
+	margin-top: 8px;
+	width: 300px;
+}
+
+#content #column-left #locations-list .location-display .edit-pencil-location {
+	width: 20px;
+	height: 20px;
+	margin: 10px  auto;
+	float: right;
+}
+
+#content #column-left #locations-list .location-display .edit-pencil-location:hover {
+	opacity: 0.6;
+}
+
 #content #column-left #locations-list .location-display p {
 	float: left;
 	height: 22px;
 	padding: 10px 0 0 5px;
 }
 
-#content #column-left #locations-list .location-display input {
-	margin-top: 8px;
-}
-
 #content #column-left #locations-list .location-display #location-name {	
-	width: 200px;
+	width: 215px;
 	margin: auto;
 }
 
@@ -289,7 +299,7 @@ ul {
 
 #content #column-left #locations-list .location-info {
 	display: none;
-	padding: 15px;	
+	padding: 10px 15px 10px 15px;
 
 	background-color: rgba(232, 232, 232, 0.4);
 }
@@ -298,9 +308,70 @@ ul {
 	width: 100%;
 	padding: 0px;
 	margin: 0px;
+	text-overflow: ellipsis;
 }
 
+#content #column-left #locations-list .location-info #location-info-desc {
+	width: 600px;
+	display: inline-block;
+}
 
+#content #column-left #locations-list .location-info #location-info-items {
+	width: 100%;
+	max-height: 100px;
+	background-color: white;
+	border: solid rgba(232, 232, 232, 1.0) 1px;
+	padding: 4px;
+	overflow-y: auto;
+	
+	-webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
+	-moz-box-sizing: border-box;    /* Firefox, other Gecko */
+	box-sizing: border-box;         /* Opera/IE 8+ */
+}
+
+#content #column-left #locations-list .location-info #items-title {
+	text-align: center;
+	font-size: 16px;
+	font-weight: bold;
+	margin: 5px 0 5px 0;
+}
+
+#content #column-left #locations-list .location-info #location-info-items .location-item-display {
+	background-color: black;
+	margin-bottom: 4px;
+}
+
+#content #column-left #locations-list .location-info #location-info-items .location-item-display #location-item-name {
+	background-color: green;
+	width: 230px;
+	display: inline-block;
+}
+
+#content #column-left #locations-list .location-info #location-info-items .location-item-display #location-item-points {
+	background-color: blue;
+	width: 230px;
+	display: inline-block;
+}
+
+#content #column-left #locations-list .location-info #location-info-options {
+	width: 22px;
+	
+	display: inline-block;
+	float: right;
+	
+
+}
+
+#content #column-left #locations-list .location-info #location-info-options .delete-button-location {
+	width: 18px;
+	height: 18px;
+	margin: 1px 15px 0 15px;
+	opacity: 0.6;
+}
+
+#content #column-left #locations-list .location-info #location-info-options .delete-button-location:hover {
+	opacity: 0.4;
+}
 
 
 

@@ -112,11 +112,25 @@
                 return false;
             });
 
-            $(document).on("click", ".edit-pencil", function(event) {
-            	//Use helper function to get the id of the surrounding div then pass it to the function
-            	var itemID = getItemID($(this), 10);
-            	jsEditItem(itemID);
-            	return false;
+            $(document).on("click", ".edit-pencil-item", function(event) {
+                //Use helper function to get the id of the surrounding div then pass it to the function
+                var itemID = getElementID($(this), 10, "item-key-");
+                jsEditItem(itemID);
+                return false;
+            });
+
+            $(document).on("click", ".edit-pencil-location", function(event) {
+                //Use helper function to get the id of the surrounding div then pass it to the function
+                var locationID = getElementID($(this), 10, "location-key-");
+                jsEditLocation(locationID);
+                return false;
+            });
+
+            $(document).on("click", ".delete-button-location", function(event) {
+                //Use helper function to get the id of the surrounding div then pass it to the function
+                var locationID = getElementID($(this), 10, "location-key-");
+                jsDeleteLocation(locationID);
+                return false;
             });
             //List grab initial lists of items and locations
             jsListItems("admin");
