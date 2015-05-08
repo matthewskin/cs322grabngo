@@ -86,8 +86,12 @@
                     <div id="horizontal-clear"></div>                    
                 </div>             
             </div>
+            <div id="dialog" title="Select Item(s)">
+            	<div id="location-items-list">
+            		
+            	</div>
+            </div>
         </div>
-
     </body>
     <?php
         if($_GET["mode"] == "locations"){
@@ -104,11 +108,13 @@
 
             $(document).on("click", ".item-display", function(event) {
                 $(this).parent().children(".item-info").slideToggle("100");
+                $(this).toggleClass("dark-background");
                 return false;
             });
 
             $(document).on("click", ".location-display", function(event) {
                 $(this).parent().children(".location-info").slideToggle("100");
+                $(this).toggleClass("dark-background");
                 return false;
             });
 
@@ -132,6 +138,46 @@
                 jsDeleteLocation(locationID);
                 return false;
             });
+
+            $(document).on("click", ".add-item-button", function(event) {
+                //Use helper function to get the id of the surrounding div then pass it to the function
+                var locationID = getElementID($(this), 10, "location-key-");
+                createDialogItems(locationID);
+                //Open the dialog
+                $( "#dialog" ).dialog({
+				    modal: true,
+				    draggable: false,
+				    resizable: false,
+				    show: 'blind',
+				    hide: 'blind',
+				    width: 800,
+				    dialogClass: 'ui-dialog-osx',
+				    buttons: {
+				        "Add Item(s)": function() {
+				        	addLocationItems(locationID);
+				            $(this).dialog("close");
+							selectedItems = [];
+				        }
+				    },
+				    close: function(){
+				    	$("#dialog #location-items-list").empty();
+				    	selectedItems = [];
+				    }
+                });
+
+                return false;
+            });
+
+            $(document).on("click", "#dialog #location-items-list .item .item-display", function(event) {
+            	$("this").toggleClass("dark-background");
+            	var itemID = getElementID($(this), 10, "item-key-");
+            	if($.inArray(itemID, selectedItems) !== -1){
+            		selectedItems.remove(itemID);
+            	} else {
+            		selectedItems.push(itemID);
+            	}            	
+            });
+
             //List grab initial lists of items and locations
             jsListItems("admin");
             jsListLocations();

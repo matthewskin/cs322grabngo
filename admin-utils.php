@@ -36,7 +36,7 @@
 
     function getLocationItems($location_id){
         $statement = "SELECT * from items INNER JOIN itemlocationjoin ON items.item_pk = itemlocationjoin.item_fk " .
-            "WHERE itemlocationjoin = '" . $location_id . "' ORDER BY items.item_name";
+            "WHERE itemlocationjoin.location_fk = '" . $location_id . "' ORDER BY items.item_name";
 
         return executeQuery($statement);
     }

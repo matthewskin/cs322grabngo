@@ -1,5 +1,6 @@
 var itemsList = {};
 var locationsList = {};
+var selectedItems = [];
 
 //Navigate between tabs (Show and hide divs)
 function changeTab(mode){
@@ -25,7 +26,7 @@ function changeTab(mode){
 //Add items returned by the server to the page and global array
 function addToItemList(items, mode, user){
 
-	console.log(items);
+	// console.log(items);
 
 	$.each(items, function(){
 		var htmlID = "item-key-" + this.item_pk;
@@ -92,7 +93,7 @@ function addToLocationList(locations, mode){
 
 	var locationKeys = [];
 
-	console.log(locations);
+	// console.log(locations);
 
 	$.each(locations, function(){
 		locationKeys.push(this.location_pk);
@@ -102,10 +103,11 @@ function addToLocationList(locations, mode){
 			var location_div = "<div class='location' id='" + htmlID + "' style='display:none'><div class='location-display'><p id='location-name'>" + 
 				this.location_name + "</p><div id='location-times'><input type='time' readonly='readonly' value='" + this.location_time_open + "'> to " + 
 	            "<input type='time' readonly='readonly' value='" + this.location_time_closed + 
-	            "'></div><img src='./images/edit-pencil.png' alt='Edit' class='edit-pencil-location' /></div>" +
+	            "'></div><img src='./images/edit-pencil.png' alt='Edit' class='edit-pencil-location' /></div>" + 
 	            "<div class='location-info'><div id='location-info-desc'><p>" + 
-	            this.location_info + "</p></div><div id='location-info-items'></div>" + 
-	            "<div id='location-info-options'><img src='./images/delete-button.png' alt='Delete' class='delete-button-location' /></div></div></div>";
+	            this.location_info + "</p></div>" + 
+	            "<div id='location-info-options'><img src='./images/delete-button.png' alt='Delete' class='delete-button-location' /></div>" +
+	            "<p id='items-title'>Items <img src='./images/add-items-button.png' alt='Add Items' class='add-item-button' /></p><div id='location-info-items'></div></div></div>";
 	    } else {
 	    	var location_div = "<div class='location' id='" + htmlID + "'><div class='location-display'><p id='location-name'>" + 
 				this.location_name + "</p><div id='location-times'><input type='time' readonly='readonly' value='" + this.location_time_open + "'> to " + 
@@ -114,7 +116,7 @@ function addToLocationList(locations, mode){
 	            "<div class='location-info'><div id='location-info-desc'><p>" + 
 	            this.location_info + "</p></div>" + 
 	            "<div id='location-info-options'><img src='./images/delete-button.png' alt='Delete' class='delete-button-location' /></div>" +
-	            "<p id='items-title'>Items</p><div id='location-info-items'></div></div></div>";
+	            "<p id='items-title'>Items <img src='./images/add-items-button.png' alt='Add Items' class='add-item-button' /></p><div id='location-info-items'></div></div></div>";
 	    }	    
 
 		//Create new object and store location in global array
@@ -160,13 +162,15 @@ function getLocationsItems(locationKeys){
 		    		alert(response["message"]);
 		    	} else {
 		    		locationsList[value]["items"] = response;
+		    		$("#location-key-" + value + " #location-info-items").empty();
 		    		$.each(response, function(innerIndex, innerValue){
 		    			var itemKey = itemsList[innerValue].item_pk;
 		    			var itemName = itemsList[innerValue].item_name;
 		    			var itemPointValue = itemsList[innerValue].item_point_value;
+		    			var itemDescription = itemsList[innerValue].item_desc;
 
-		    			var locationItemDiv = "<div class='location-item-display' id='item-key-" + itemKey + "'><div id='location-item-name'>"+ itemName +
-		    			"</div><div id='location-item-points'>" + itemPointValue + "</div></div>"
+		    			var locationItemDiv = "<div class='location-item-display' id='item-key-" + itemKey + "'><p id='location-item-name'>"+ itemName +
+		    			"</p><p id='location-item-points'>" + itemPointValue + "</p><p id='location-item-desc'>" + itemDescription + "</p></div>"
 
 		    			$("#location-key-" + value + " #location-info-items").append(locationItemDiv);
 		    		});
@@ -184,7 +188,7 @@ function jsAddItem(formDataInput){
 		json[this.name] = this.value || '';
 	});
 
-	console.log(json);
+	// console.log(json);
 	
 	jQuery.ajax({
 		type: "POST",
@@ -210,7 +214,7 @@ function jsListItems(user){
 
 	json["endpoint"] = "list-items";
 
-	console.log(json);
+	// console.log(json);
 	
 	jQuery.ajax({
 		type: "POST",
@@ -242,7 +246,7 @@ function jsAddLocation(formDataInput){
 		json[this.name] = this.value || '';
 	});
 
-	console.log(json);
+	// console.log(json);
 	
 	jQuery.ajax({
 		type: "POST",
@@ -268,7 +272,7 @@ function jsListLocations(){
 
 	json["endpoint"] = "list-locations";
 
-	console.log(json);
+	// console.log(json);
 	
 	jQuery.ajax({
 		type: "POST",
@@ -286,6 +290,50 @@ function jsListLocations(){
 	    	}
 		}		
 	});
+}
+
+//Generate the location items list by adding divs generate from itemsList
+function createDialogItems(locationKey){
+	$.each(itemsList, function() {
+		if($.inArray(this["item_pk"], locationsList[locationKey]["items"]) === -1){		
+			var htmlID = "item-key-" + this["item_pk"];
+
+			var locationItemsDiv = "<div class='item' id='" + htmlID + "'><div class='item-display'><p id='item-name'>" + 
+						this["item_name"] + "</p><p id='item-points'>" + this["item_point_value"] + "</p><p id='item-desc'>" + 
+						this["item_desc"] + "</p></div></div>";
+
+			$("#dialog #location-items-list").append(locationItemsDiv);
+		}
+	});
+}
+
+//Add items that have been selected from dialog to the location join (Preforms the query)
+function addLocationItems(locationKey){	
+	$.each(selectedItems, function(index, value){
+		json = {};
+
+		json["endpoint"] = "add-location-item";
+		json["location-key"] = locationKey;
+		json["item-key"] = value;
+
+		jQuery.ajax({
+			type: "POST",
+			url: "jsapi.php",
+			dataType: "json",
+
+			data: json,
+
+		    success: function (response) {
+		    	if(response["status"] === "ERROR"){
+		    		console.log(response);
+		    		alert(response["message"]);
+		    	} else {
+		    		console.log(response);
+		    		getLocationsItems([locationKey]);
+		    	}
+			}		
+		});
+	});	
 }
 
 //Serialize the add form and pass it to the add item handling function
@@ -323,7 +371,6 @@ function jsDeleteLocation(locationID){
 
 var recursionCounter = 0;
 function getElementID(selector, recursionDepth, searchString){
-	console.log(selector);
 	var elementID = selector.attr("id");
 	if(elementID === undefined){
 		elementID = "";
@@ -344,6 +391,16 @@ function getElementID(selector, recursionDepth, searchString){
 	}
 }
 
+Array.prototype.remove = function() {
+    var what, a = arguments, L = a.length, ax;
+    while (L && this.length) {
+        what = a[--L];
+        while ((ax = this.indexOf(what)) !== -1) {
+            this.splice(ax, 1);
+        }
+    }
+    return this;
+};
 
 
 

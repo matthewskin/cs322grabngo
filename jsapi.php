@@ -153,10 +153,34 @@
 
     }
 
+    function addLocationItem(){
+
+    	$item_foreign_key = $_POST["item-key"];
+		$location_foreign_key = $_POST["location-key"];		
+		
+		$statement = "INSERT INTO itemlocationjoin (item_fk, location_fk) 
+			VALUES ('" . $item_foreign_key . "', '" . $location_foreign_key . "')";
+
+		$result = executeQuery($statement);
+
+		if($result == false){
+			returnJSONError("Unable to add location item. Server Error. " . $GLOBALS["dbconnection"]->error);
+			return false;
+		} else {
+			//Get the pk of the inserted element and grab it.
+			$itemlocation_id = getInsertedID();
+			$itemlocation = executeQuery("SELECT * FROM itemlocationjoin WHERE itemlocation_pk = " . $itemlocation_id);
+			//Return new item to JS.
+			returnJSONResult($itemlocation);
+			return true;
+		}		
+    }
+
     function listLocationItems(){
     	$location_key = $_POST["location-pk"];
 
-    	$statement = "SELECT item_fk FROM itemlocationjoin WHERE location_fk = " . $location_key;
+    	$statement = "SELECT itemlocationjoin.item_fk FROM itemlocationjoin INNER JOIN items ON items.item_pk = itemlocationjoin.item_fk 
+    		WHERE location_fk = " . $location_key . " ORDER BY items.item_name";
         $result = executeQuery($statement);
 
         if($result == false){
@@ -196,6 +220,9 @@
 	    	break;
 	    case "add-location":
 	    	addLocation();
+	    	break;
+	    case "add-location-item":
+	    	addLocationItem();
 	    	break;
 	    case "delete-item":
 	    	deleteItem();
