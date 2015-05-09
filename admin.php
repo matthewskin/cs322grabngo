@@ -91,6 +91,9 @@
             		
             	</div>
             </div>
+            <div id="dialog-confirm" title="Confirm...">
+            
+            </div>
         </div>
     </body>
     <?php
@@ -132,10 +135,55 @@
                 return false;
             });
 
+            $(document).on("click", ".delete-button-item", function(event) {
+                //Use helper function to get the id of the surrounding div then pass it to the function
+                var itemID = getElementID($(this), 10, "item-key-");
+                $("#dialog-confirm").append("<p>Are you sure you would like to delete this item?</p>");
+
+                $( "#dialog-confirm" ).dialog({
+                  resizable: false,
+                  height:230,
+                  modal: true,
+                  buttons: {
+                    "Delete": function() {                        
+                        $( this ).dialog( "close" );
+                        $("#dialog-confirm").empty();
+                        jsDeleteItem(itemID);
+                        return false;
+                    },
+                    Cancel: function() {
+                      $( this ).dialog( "close" );
+                      $("#dialog-confirm").empty();
+                      return false;
+                    }
+                  }
+                });
+                return false;
+            });
+
             $(document).on("click", ".delete-button-location", function(event) {
                 //Use helper function to get the id of the surrounding div then pass it to the function
                 var locationID = getElementID($(this), 10, "location-key-");
-                jsDeleteLocation(locationID);
+                $("#dialog-confirm").append("<p>Are you sure you would like to delete this location?</p>");
+
+                $( "#dialog-confirm" ).dialog({
+                  resizable: false,
+                  height:230,
+                  modal: true,
+                  buttons: {
+                    "Delete": function() {                        
+                        $( this ).dialog( "close" );
+                        $("#dialog-confirm").empty();
+                        jsDeleteLocation(locationID);
+                        return false;
+                    },
+                    Cancel: function() {
+                      $( this ).dialog( "close" );
+                      $("#dialog-confirm").empty();
+                      return false;
+                    }
+                  }
+                });
                 return false;
             });
 
