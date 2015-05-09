@@ -28,6 +28,18 @@
         return executeQuery($statement);
     }
 
+	function getItemsFromLocation($location_name) {
+		$statement = "
+			SELECT *
+			FROM items, locations, itemlocationjoin
+			WHERE 1
+			AND locations.location_pk = itemlocationjoin.location_fk
+			AND itemlocationjoin.item_fk = items.item_pk
+			AND location_name = '" . $location_name . "'";
+		
+		return executeQuery($statement);	
+	}
+	
     function getLocations(){
         $statement = "SELECT * from locations ORDER BY locations.location_name"; 
 
