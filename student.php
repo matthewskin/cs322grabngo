@@ -35,13 +35,59 @@
 
             <div id="column-right">
                 <div id="add-item">
+                	<input type="button" id="rules" onclick="damn()" value="Grab n Go rules">
                     <h6>Shopping Cart</h6>
                     <div id="horizontal-clear"></div>
-                    <form action="execute.php" method="post">
                     <input type="hidden" name="mode" value="add-item">
                     </form>
                     <div id="horizontal-clear"></div>
-                </div>           
+                    	<div id="items-list">
+                     	<h6>Items</h6>
+                    	<?php
+                    	$result = getItems();
+                    	if($result == false){
+                        	die("No items found.");
+                    	}          
+                    	$count = 0;
+						// Change...
+                    	//getting all items
+                    	$totalpoints = 0;
+                    	while ($row = $result->fetch_assoc()) {
+                	?>
+                    	<div class="item">
+                        	<div class="item-display">
+                            	<p id="item-name"><?php echo $row["item_name"] . " " . $row["item_point_value"]; ?></p>  
+                            	<p id="allergen-info"><?php echo $row["item_allergen_info"]; ?></p>
+                            	<div style="border-bottom:1px solid black"></div>
+                            	<?php
+                            	$totalpoints += $row["item_point_value"];
+                            	?>
+                            	<br>                  
+                        	</div>
+                    	</div>
+                	<?php	
+                    	}
+                    	$count = $count + 1;                        
+                	?>
+                	</div>      
+                </div>   
+			<div id="add-item">
+            
+            Reminder: 18 points per swipe <br>
+			<p>Swipes</p>
+				<select name="Swipes">
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="3">4</option>
+                </select><br>
+			<p> Total Points: <?php echo $totalpoints?> </p>				
+			<br>
+            <input type="submit" value="Submit Order">
+            <input type="submit" value="Print Order">
+            </form>
+    </div>
+</div>  
             </div>
         </div>
 
@@ -53,10 +99,14 @@
                 $(this).parent().children(".item-info").slideToggle("100");
                 return false;
             });
-
+			
             //This function populates the item-list div with items
             jsListItems("student");
-        });         
+        });  
+        function damn(){
+        	window.open('http://localhost:8888/cs322grabngo/rules.png');
+        }       
     </script>
     
 </html>
+
