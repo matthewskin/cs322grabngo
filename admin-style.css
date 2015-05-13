@@ -228,15 +228,50 @@ ul {
 
 #content #column-left #items-list .item-info {
 	display: none;
-	padding: 15px;	
+	padding: 10px 15px 10px 15px;	
 
 	background-color: rgba(232, 232, 232, 0.4);
 }
 
-#content #column-left #items-list .item-info p{
-	width: 100%;
+#content #column-left #items-list .item-info p {
 	padding: 0px;
 	margin: 0px;
+}
+
+#content #column-left #items-list .item-info #item-info-desc {
+	width: 600px;
+	min-height: 22px;
+  	display: inline-block;
+}
+
+#content #column-left #items-list .item-info #item-info-desc {
+	width: 600px;
+	min-height: 22px;
+  	display: inline-block;
+}
+
+#content #column-left #items-list .item-info #item-info-options {
+	width: 22px;
+	height: 22px;
+	display: inline-block;
+	float: right;
+}
+
+#content #column-left #items-list .item-info #item-info-contains {
+	width: 100%;
+	min-height: 22px;
+	margin-top: 10px;
+}
+
+#content #column-left #items-list .item-info #item-info-options .delete-button-item {
+	width: 18px;
+	height: 18px;
+	margin: 1px 15px 0 15px;
+	opacity: 0.6;
+}
+
+#content #column-left #items-list .item-info #item-info-options .delete-button-item:hover {
+	opacity: 0.4;
 }
 
 #content #column-left #items-list .item-info #allergen-info {
