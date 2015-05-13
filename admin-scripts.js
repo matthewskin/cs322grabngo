@@ -48,7 +48,7 @@ function addToItemList(items, mode, user){
 			if(user === "student"){
 				var item_div = "<div class='item' id='" + htmlID + "'><div class='item-display'><p id='item-name'>" + 
 					this.item_name + "</p><p id='item-points'>" + this.item_point_value + "</p><p id='item-special-diet'>" + specialDiet +
-					"</p></div><div class='item-info'><p>" + 
+					"</p><img src='./images/add-items-button.png' alt='Add Items' class='add-item-cart-button' /></div><div class='item-info'><p>" + 
 					this.item_desc + "</p><br><p id='allergen-info'>" + 
 					this.item_allergen_info + "</p></div></div>";
 			} else if(user === "admin"){
@@ -356,6 +356,31 @@ function jsEditItem(itemID){
 function jsEditLocation(locationID){
 	alert(locationID);
 	return false;
+}
+
+function getItemsFromLocation(locationName){
+	json = {};
+
+	json["endpoint"] = "get-items-from-location";
+	json["location-name"] = locationName;
+
+	jQuery.ajax({
+		type: "POST",
+		url: "jsapi.php",
+		dataType: "json",
+
+		data: json,
+
+		success: function (response) {
+			if(response["status"] === "ERROR"){
+				console.log(response);
+				alert(response["message"]);
+			} else {
+				console.log(response);
+				addToItemList(response, "loaded-items", "student");
+			}
+		}		
+	});
 }
 
 function jsDeleteItem(itemID){

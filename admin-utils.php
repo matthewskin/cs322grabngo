@@ -28,7 +28,8 @@
         return executeQuery($statement);
     }
 
-	function getItemsFromLocation($location_name) {
+	function getItemsFromLocation() {
+		$location_name = $_POST["location-name"];
 		$statement = "
 			SELECT *
 			FROM items, locations, itemlocationjoin
@@ -37,6 +38,7 @@
 			AND itemlocationjoin.item_fk = items.item_pk
 			AND location_name = '" . $location_name . "'";
 		
+
 		return executeQuery($statement);	
 	}
 	

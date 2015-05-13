@@ -63,6 +63,27 @@
 			return true;
 		}
     }
+	
+	function getItemsFromLocation() {
+		$location_name = $_POST["location-name"];
+		$statement = "
+			SELECT *
+			FROM items, locations, itemlocationjoin
+			WHERE 1
+			AND locations.location_pk = itemlocationjoin.location_fk
+			AND itemlocationjoin.item_fk = items.item_pk
+			AND location_name = '" . $location_name . "' ORDER BY items.item_name";
+		
+		$result = executeQuery($statement);
+
+    	if($result == false){
+			returnJSONError("Unable to fetch locations. Server Error. " . $GLOBALS["dbconnection"]->error);
+			return false;
+		} else {
+			returnJSONResult($result);
+			return true;
+		}
+	}
 
     function addItem(){
 
@@ -230,6 +251,9 @@
 	    case "delete-location":
     		deleteLocation();
     		break;
+		case "get-items-from-location":
+			getItemsFromLocation();
+			break;
     }
 	
     
