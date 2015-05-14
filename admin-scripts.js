@@ -19,8 +19,6 @@ function changeTab(mode){
 		$("#content #column-left #locations-list").slideUp(300, function(){
 			$("#content #column-left #items-list").slideDown(300);
 		});
-		//$("#content #column-right #add-item").show(0);
-		//$("#content #column-left #items-list").show(0);
 	} else if (mode === "Location"){
 		$("#content #column-right #add-item").slideUp(300, function(){
 			$("#content #column-right #add-location").slideDown(300);
@@ -49,9 +47,10 @@ function addToItemList(items, mode, user){
 		if(mode === "new-item"){
 			var item_div = "<div class='item' id='" + htmlID + "' style='display:none'><div class='item-display'><p id='item-name'>" + 
 				this.item_name + "</p><p id='item-points'>" + this.item_point_value + "</p><p id='item-special-diet'>" + specialDiet +
-				"</p><img src='./images/edit-pencil.png' alt='Edit' class='edit-pencil-item' /></div><div class='item-info'><p>" + 
-				this.item_desc + "</p><br><p id='allergen-info'>" + 
-				this.item_allergen_info + "</p><br></div></div>";
+				"</p><img src='./images/edit-pencil.png' alt='Edit' class='edit-pencil-item' /></div><div class='item-info'><div id='item-info-desc'><p>" + 
+				this.item_desc + "</p></div><div id='item-info-options'><img src='./images/delete-button.png' alt='Delete' class='delete-button-item' /></div>" +
+				"<div id='item-info-contains'><p id='allergen-info'>" + 
+				this.item_allergen_info + "</p></div></div></div>";
 		} else {
 			if(user === "student"){
 				var item_div = "<div class='item' id='" + htmlID + "'><div class='item-display'><p id='item-name'>" + 
@@ -62,9 +61,10 @@ function addToItemList(items, mode, user){
 			} else if(user === "admin"){
 				var item_div = "<div class='item' id='" + htmlID + "'><div class='item-display'><p id='item-name'>" + 
 					this.item_name + "</p><p id='item-points'>" + this.item_point_value + "</p><p id='item-special-diet'>" + specialDiet +
-					"</p><img src='./images/edit-pencil.png' alt='Edit' class='edit-pencil-item' /></div><div class='item-info'><p>" + 
-					this.item_desc + "</p><br><p id='allergen-info'>" + 
-					this.item_allergen_info + "</p><br></div></div>";
+					"</p><img src='./images/edit-pencil.png' alt='Edit' class='edit-pencil-item' /></div><div class='item-info'><div id='item-info-desc'><p>" + 
+					this.item_desc + "</p></div><div id='item-info-options'><img src='./images/delete-button.png' alt='Delete' class='delete-button-item' /></div>" +
+					"<div id='item-info-contains'><p id='allergen-info'>" + 
+					this.item_allergen_info + "</p></div></div></div>";
 			}	
 		}
 
@@ -249,6 +249,7 @@ function jsListItems(user){
 
 //Send a request to the server to create and return a location
 function jsAddLocation(formDataInput){
+	itemsList = {};
 	var json = {};
 
 	jQuery.each(formDataInput, function() {
@@ -277,6 +278,7 @@ function jsAddLocation(formDataInput){
 
 //Send a request to the server to query and return all locations
 function jsListLocations(){
+	locationsList = {};
 	var json = {};
 
 	json["endpoint"] = "list-locations";
@@ -393,14 +395,71 @@ function getItemsFromLocation(locationName){
 }
 
 function jsDeleteItem(itemID){
+	var json = {};
 
+	json["endpoint"] = "delete-item";
+	json["item_pk"] = itemID;
+
+	jQuery.ajax({
+		type: "POST",
+		url: "jsapi.php",
+		dataType: "json",
+
+		data: json,
+ 
+	    success: function (response) {
+	    	if(response["status"] === "ERROR"){
+	    		console.log(response);
+	    		alert(response["message"]);
+	    	} else {
+	    		console.log(response);
+	    		
+	    		delete itemsList[itemID];
+
+	    		$("#item-key-" + itemID + ".item").slideUp(300, function() { 
+	    			$(this).remove();
+	    		});
+
+    			//Repaint the locations/items divs to remove the deleted item
+    			var locationKeys = [];
+    			$.each(locationsList, function() {
+    				locationKeys.push(this["location_pk"]);
+    			});
+    			getLocationsItems(locationKeys);
+	    	}
+		}		
+	});
 }
 
 function jsDeleteLocation(locationID){
 
-	alert(locationID);
+	var json = {}; 
+	
+	json["endpoint"] = "delete-location";
+	json["location_pk"] = locationID;
+ 
+	jQuery.ajax({
+		type: "POST",
+		url: "jsapi.php",
+		dataType: "json",
 
-	return false;
+		data: json,
+
+	    success: function (response) {
+	    	if(response["status"] === "ERROR"){
+	    		console.log(response);
+	    		alert(response["message"]);
+	    	} else {
+	    		console.log(response);
+	    		
+	    		delete locationsList[locationID];
+
+	    		$("#location-key-" + locationID).slideUp(300, function() { 
+	    			$(this).remove(); 
+	    		});
+	    	}
+		}		
+	});
 }
 
 var recursionCounter = 0;
