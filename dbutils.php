@@ -1,16 +1,16 @@
 <?php
 
     /*Database for cs.knox.edu*/
-	//$servername = "cs.knox.edu";
-    //$username = "root";
-    //$password = "KnxRlz1837";
-    //$database = "CS322grabngo";
+    $servername = "cs.knox.edu";
+    $username = "root";
+    $password = "KnxRlz1837";
+    $database = "CS322grabngo";
 
 	//For Windows
-    $servername = "localhost";
-    $username = "root";
-    $password = "";
-    $database = "CS322grabngo";
+    //$servername = "localhost";
+    //$username = "root";
+    //$password = "";
+    //$database = "CS322grabngo";
 
 	//For Macs (a.k.a Alan)
 	// $servername = "localhost";
