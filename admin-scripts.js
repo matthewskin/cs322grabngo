@@ -437,20 +437,23 @@ Array.prototype.remove = function() {
 };
 
 function addItemToCart(itemID){
-	cartList[itemID] = itemsList[itemID];
-	pointTotal += itemsList[itemID]["item_point_value"];//This line is doing 2+4=24 I think
-	if (cartList[itemID]["count"] = 1) {
-		
+	pointTotal += Number(itemsList[itemID]["item_point_value"]);//This line is doing 2+4=24 I think
+	if (cartList[itemID] !== undefined) {
+		cartList[itemID]["count"] += 1;
 		//Increase value by 1
 		//cartList[itemID]["count"] = 1;
 		//Need to figure out how to add a number of items column for each item
+	} else {
+		cartList[itemID] = itemsList[itemID];
+		cartList[itemID]["count"] = 1;
 	}
 	reloadCart();
+	alert("Point total (test)=" + pointTotal);
 }
 
 function deleteItemFromCart(itemID){
 	cartList[itemID] = "";
-	pointTotal = pointTotal - itemsList[itemID]["item_point_value"];
+	pointTotal -= Number(itemsList[itemID]["item_point_value"]);
 	//cartList[itemID]["count"] = 1;
 	reloadCart();
 }
@@ -463,7 +466,7 @@ function reloadCart(){
 		var htmlID = "item-key-" + this["item_pk"];
 
 		var cartItemsDiv = "<div class='item' id='" + htmlID + "'><div class='item-display'><p id='item-name'>" + 
-					this["item_name"] + "</p><p id='item-points'>" + this["item_point_value"] + "</p></div></div>";
+					this["item_name"] + "</p><p id='item-points'>" + this["item_point_value"] + "</p><p id='item-count'>" + this["count"] + "</p></div></div>";
 		
 		$("#cart-loaded-items").append(cartItemsDiv);	
 	});
