@@ -215,6 +215,15 @@ ul {
 	opacity: 0.6;
 }
 
+
+#content #column-left #items-list .item-display .add-item-cart-button {
+	width: 18px;
+	height: 18px;
+	margin: 11px 4 0 1px;
+	opacity: 0.8;
+}
+
+
 #content #column-left #items-list .item-display:hover,  #content #column-left #items-list .item-display.dark-background {
 	background-color: #E6E6E6;
 	cursor: hand;
@@ -587,4 +596,5 @@ ul {
 #dialog #location-items-list .item .item-display #item-desc {
 	width: 65%;
 	overflow: ellipsis;
+
 }

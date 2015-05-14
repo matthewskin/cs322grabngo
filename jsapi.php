@@ -1,5 +1,7 @@
 <?php
-
+	/*
+	Austen Lake
+	*/
 	require_once("dbutils.php");
 
     /*----------------------------------------------------Helper Functions-----------------------------------------------------*/
@@ -30,11 +32,6 @@
 
     function returnJSONError($message){
     	$output = array("status" => "ERROR", "message" => $message);
-    	print json_encode($output);
-    }
-
-    function returnJSONSuccess($message){
-    	$output = array("status" => "SUCCESS", "message" => $message);
     	print json_encode($output);
     }
 
@@ -223,63 +220,11 @@
     }
 
     function deleteItem(){
-    	$itemKey = $_POST["item_pk"];
 
-    	$statement = "DELETE FROM items WHERE items.item_pk = '" . $itemKey . "'";
-        $result = executeQuery($statement);
-
-        if($result == false){
-			returnJSONError("Unable to delete the selected item. Please refresh the page and try again. Server Error. " . $GLOBALS["dbconnection"]->error);
-			return false;
-		} else {
-			$statement = "DELETE FROM itemlocationjoin WHERE itemlocationjoin.item_fk = '" . $itemKey . "'";
-        	$result = executeQuery($statement);
-			if($result == false) {
-				returnJSONError("Unable to remove associations with one or more locations. Please contact an administrator. Server Error. " . $GLOBALS["dbconnection"]->error);
-				return false;
-			} else {
-				returnJSONSuccess("Item - " . $itemKey . " - has been deleted.");
-				return true;
-			}		
-		}
     }
 
     function deleteLocation(){
-    	$locationKey = $_POST["location_pk"];
 
-    	$statement = "DELETE FROM locations WHERE locations.location_pk = '" . $locationKey . "'";
-        $result = executeQuery($statement);
-
-        if($result == false){
-			returnJSONError("Unable to delete the selected location. Please refresh the page and try again. Server Error. " . $GLOBALS["dbconnection"]->error);
-			return false;
-		} else {
-			$statement = "DELETE FROM itemlocationjoin WHERE itemlocationjoin.location_fk = '" . $locationKey . "'";
-        	$result = executeQuery($statement);
-			if($result == false) {
-				returnJSONError("Unable to delete items associated with the selected location. Please contact an administrator. Server Error. " . $GLOBALS["dbconnection"]->error);
-				return false;
-			} else {
-				returnJSONSuccess("Location - " . $locationKey . " - has been deleted.");
-				return true;
-			}			
-		}
-    }
-
-    function deleteLocationItem(){
-    	$itemKey = $_POST["item_pk"];
-    	$locationKey = $_POST["location_pk"];
-
-    	$statement = "DELETE FROM itemlocationjoin WHERE itemlocationjoin.item_fk = '" . $itemKey . "' AND itemlocationjoin.location_fk = '" . $locationKey . "'";
-        $result = executeQuery($statement);
-
-        if($result == false){
-			returnJSONError("Unable to delete the selected location item. Please refresh the page and try again. Server Error. " . $GLOBALS["dbconnection"]->error);
-			return false;
-		} else {
-			returnJSONSuccess("The link between the item - " . $itemKey . " - and the location - " . $locationKey . " - has been deleted.");
-			return true;
-		}
     }
 
 
@@ -314,12 +259,5 @@
     	case "delete-location-item":
     		deleteLocationItem();
     		break;
-
     }
-	
-    
-
-
-
-
 ?>
