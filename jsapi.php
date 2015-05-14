@@ -308,15 +308,13 @@
 	    case "delete-location":
     		deleteLocation();
     		break;
-<<<<<<< HEAD
 		case "get-items-from-location":
 			getItemsFromLocation();
 			break;
-=======
     	case "delete-location-item":
     		deleteLocationItem();
     		break;
->>>>>>> b4863767d37c2099dc2ac9066e083dd968688e2f
+
     }
 	
     
