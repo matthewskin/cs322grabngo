@@ -39,7 +39,21 @@
 		
 			<div id="cart-items-list">
 				<h6>Shopping Cart</h6>
+				
+				<div>Points / Swipe: <span id="points-per">X</span><span style="float: right">Max # Of Swipes: 4</span></div>
+				<div id="horizontal-clear"></div>
+				<br />
+				
+				<div>Points Remaining: <span id=points-remain">X</span><span style="float: right">X</span><span id="swipes-used" style="float: right">Swipe #</span></div>
+				<div id="horizontal-clear"></div>
+				<br />
+				
 				<div id="cart-loaded-items"></div>
+				
+				<div id="dialog" title="Submit Order" style="display: none">
+ 					<p>Are you sure you would like to submit this order?</p>
+				</div>
+				<button type="button" id="submit-order">Submit Order</button>
 			</div>      
 			
 			<div id="horizontal-clear"></div>
@@ -49,7 +63,27 @@
 
     <script>
 		$(document).ready(function() {
-		
+			$(document).on("click", "#submit-order", function(event) {
+				$("#dialog").dialog({
+					modal: true,
+					draggable: true,
+					resizable: false,
+					show: 'blind',
+					hide: 'blind',
+					width: 400,
+					buttons: {
+						"Submit Order": function(){
+							submitOrder();
+							$(this).dialog("close");
+						},
+						"Go Back": function(){
+							$(this).dialog("close");
+						}
+					}
+				});
+				return false;
+			});
+			
 		    $(document).on("click", ".add-item-button", function(event) {
                 //Use helper function to get the id of the surrounding div then pass it to the function
                 var locationID = getElementID($(this), 10, "location-key-");
@@ -111,6 +145,7 @@
 
             //This function populates the item-list div with items
             //jsListItems("student");
+     
         });         
     </script>
 </html>

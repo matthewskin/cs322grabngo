@@ -7,6 +7,13 @@ var locationsList = {};
 var cartList = {};
 
 var pointTotal = 0;
+// Points per swipe; determined by time of day
+// To add: make pointsMax determined by time of day or maybe bassed on location selected?
+var pointsMax = 18;
+var swipesUsed = 1;
+// Points remaining on a swipe
+var pointsRemaining = pointsMax;
+
 
 var selectedItems = [];
 
@@ -633,7 +640,8 @@ function addItemToCart(itemID){
 		cartList[itemID]["count"] = 1;
 	}
 	reloadCart();
-	alert("Point total (test)=" + pointTotal);
+
+	//alert("Point total (test)=" + pointTotal);
 }
 
 function deleteItemFromCart(itemID){
@@ -650,13 +658,32 @@ function reloadCart(){
 				
 		var htmlID = "item-key-" + this["item_pk"];
 
-		var cartItemsDiv = "<div class='item' id='" + htmlID + "'><div class='item-display'><p id='item-name'>" + 
-					this["item_name"] + "</p><p id='item-points'>" + this["item_point_value"] + "</p><p id='item-count'>" + this["count"] + "</p></div></div>";
+		var cartItemsDiv = "<div class='item' id='" + htmlID + "'><div class='item-display'><span id='item-count'>" + this["count"] + "</span><span> x </span><span id='item-name'>" + 
+					this["item_name"] + "</span><span id='item-points' style='float:right'>" + this["item_point_value"] * this["count"] + "</span></div></div><br />";
 		
+		
+		/*
+		"<div class='item' id='" + htmlID + "'>
+			<div class='item-display'>
+				<p id='item-name'>" + this["item_name"] + "</p>
+				<p id='item-points'>" + this["item_point_value"] + "</p>
+				<p id='item-count'>" + this["count"] + "</p>
+			</div>
+		</div>";
+		
+		*/
 		$("#cart-loaded-items").append(cartItemsDiv);	
 	});
 	
-	
+}
+
+function submitOrder(){
+	var orderStr = "Items: ";
+	$.each(cartList, function() {
+		orderStr = orderStr + " " + this["item_name"];
+	});
+	orderStr = orderStr + "\nPoints: " + pointTotal + " Swipes: " + swipesUsed;
+	alert(orderStr);
 }
 
 
