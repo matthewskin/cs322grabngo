@@ -284,6 +284,45 @@
 		}
 	}
 
+	function editItem(){
+		$item_key = $_POST["item-pk"];
+
+		$item_name = htmlspecialchars(mysql_escape_string ($_POST["item-name"]));
+		$item_desc = htmlspecialchars(mysql_escape_string ($_POST["item-desc"]));
+		$point_value = $_POST["point-value"];
+		$allergen_info = htmlspecialchars(mysql_escape_string ($_POST["allergen-info"]));
+		$special_diet = htmlspecialchars(mysql_escape_string ($_POST["item-special-diet"]));
+		if($special_diet == "none"){
+			$special_diet = null;
+		}
+
+		if(strlen(trim($item_name)) < 1){
+			returnJSONError("Unable to update the item. Invalid input.");
+			return false;
+		}
+
+
+		$statement = "UPDATE items SET 
+			items.item_name = '" . $item_name . "', 
+			items.item_desc = '" . $item_desc . "',
+			items.item_point_value = '" . $point_value . "',
+			items.item_allergen_info = '" . $allergen_info . "',
+			items.item_special_diet = '" . $special_diet . "' 
+			WHERE items.item_pk = '" . $item_key . "'";
+
+		$result = executeQuery($statement);
+
+		if($result == false){
+			returnJSONError("Unable to update the selected item. " . $GLOBALS["dbconnection"]->error);
+			return false;
+		} else {
+			$item = executeQuery("SELECT * FROM items WHERE item_pk = " . $item_key);
+			//Return new item to JS.
+			returnJSONResult($item);
+			return true;
+		}
+	}
+
     switch ($_POST["endpoint"]) {
 	    case "list-items":
 	        listItems();
@@ -296,6 +335,12 @@
 	    	break;
 	    case "add-item":
 	    	addItem();
+	    	break;
+	    case "edit-item":
+	    	editItem();
+	    	break;
+	    case "edit-location":
+	    	editLocation();
 	    	break;
 	    case "add-location":
 	    	addLocation();

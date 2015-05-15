@@ -13,19 +13,30 @@ var selectedItems = [];
 //Navigate between tabs (Show and hide divs)
 function changeTab(mode){
 	if(mode === "Item"){
-		$("#content #column-right #add-location").slideUp(300, function(){
-			$("#content #column-right #add-item").slideDown(300);
-		});
-		$("#content #column-left #locations-list").slideUp(300, function(){
-			$("#content #column-left #items-list").slideDown(300);
-		});
+		//Check to see if the items panel is already selected.
+		if($("#content #column-left #items-list").css("display") === "none"){
+			$("#content #column-right #add-location").slideUp(300, function(){
+				$("#content #column-right #add-item").slideDown(300);
+			});
+			$("#content #column-left #locations-list").slideUp(300, function(){
+				$("#content #column-left #items-list").slideDown(300);
+			});
+		}		
 	} else if (mode === "Location"){
-		$("#content #column-right #add-item").slideUp(300, function(){
-			$("#content #column-right #add-location").slideDown(300);
-		});
-		$("#content #column-left #items-list").slideUp(300, function(){
-			$("#content #column-left #locations-list").slideDown(300);
-		});
+		if($("#content #column-left #locations-list").css("display") === "none"){
+			if($("#content #column-right #edit-item").css("display") !== "none"){
+				$("#content #column-right #edit-item").slideUp(300, function(){
+					$("#content #column-right #add-location").slideDown(300);
+				});
+			} else {
+				$("#content #column-right #add-item").slideUp(300, function(){
+					$("#content #column-right #add-location").slideDown(300);
+				});
+			}
+			$("#content #column-left #items-list").slideUp(300, function(){
+				$("#content #column-left #locations-list").slideDown(300);
+			});
+		}
 	}
 }
 
@@ -44,7 +55,7 @@ function addToItemList(items, mode, user){
 			specialDiet = this.item_special_diet;
 		}
 
-		if(mode === "new-item"){
+		if(mode === "new-item" || mode === "update"){
 			var item_div = "<div class='item' id='" + htmlID + "' style='display:none'><div class='item-display'><p id='item-name'>" + 
 				this.item_name + "</p><p id='item-points'>" + this.item_point_value + "</p><p id='item-special-diet'>" + specialDiet +
 				"</p><img src='./images/edit-pencil.png' alt='Edit' class='edit-pencil-item' /></div><div class='item-info'><div id='item-info-desc'><p>" + 
@@ -87,12 +98,18 @@ function addToItemList(items, mode, user){
 
 		//console.log(item_div);
 		
-		if(mode === "new-item"){
-        
-		$("#loaded-items").prepend(item_div);
+		if(mode === "new-item"){        
+			$("#loaded-items").prepend(item_div);
         	$("#" + htmlID).slideDown(250);
         } else if (mode === "loaded-items"){
         	$("#loaded-items").append(item_div);
+        } else if (mode === "update"){
+        	var oldItem = $("#items-list #loaded-items #" + htmlID);
+        	oldItem.after(item_div);
+        	oldItem.slideUp(250, function() {
+        		oldItem.remove();
+        		$("#items-list #loaded-items #" + htmlID).slideDown(250);
+        	});         	
         }
     });
 }
@@ -179,7 +196,8 @@ function getLocationsItems(locationKeys){
 		    			var itemDescription = itemsList[innerValue].item_desc;
 
 		    			var locationItemDiv = "<div class='location-item-display' id='item-key-" + itemKey + "'><p id='location-item-name'>"+ itemName +
-		    			"</p><p id='location-item-points'>" + itemPointValue + "</p><p id='location-item-desc'>" + itemDescription + "</p></div>"
+		    			"</p><p id='location-item-points'>" + itemPointValue + "</p><p id='location-item-desc'>" + itemDescription + 
+		    			"</p><img src='./images/delete-button.png' alt='Delete' class='delete-button-item-location'></div>"
 
 		    			$("#location-key-" + value + " #location-info-items").append(locationItemDiv);
 		    		});
@@ -212,6 +230,7 @@ function jsAddItem(formDataInput){
 	    		alert(response["message"]);
 	    	} else {
 	    		addToItemList(response, "new-item");
+	    		$("#add-item-form")[0].reset();
 	    	}
 		}		
 	});
@@ -353,18 +372,98 @@ function submitAddItemForm(){
 	return false;
 }
 
+function submitEditItemForm(){
+	jsEditItem($("#edit-item-form").serializeArray());
+	return false;
+}
+
 //Serialize the location form and pass it to the add location handling function
 function submitAddLocationForm(){
 	jsAddLocation($("#add-location-form").serializeArray());
 	return false;
 }
 
-function jsEditItem(itemID){
-	alert(itemID);
+function submitEditLocationForm(){
+	jsEditLocation($("#edit-location-form").serializeArray());
 	return false;
 }
 
-function jsEditLocation(locationID){
+function jsEditItemTab(itemID) {
+	if($("#content #column-right #edit-item").css("display") !== "none"){
+		$("#content #column-right #edit-item").slideUp(300, function(){
+			$("#content #column-right #edit-item").slideDown(300);
+			document.forms['edit-item-form'].elements['item-pk'].value = itemID;
+			document.forms['edit-item-form'].elements['item-name'].value = itemsList[itemID]["item_name"];
+			document.forms['edit-item-form'].elements['item-desc'].value = itemsList[itemID]["item_desc"];
+			document.forms['edit-item-form'].elements['point-value'].value = itemsList[itemID]["item_point_value"];
+			document.forms['edit-item-form'].elements['allergen-info'].value = itemsList[itemID]["item_allergen_info"];
+			document.forms['edit-item-form'].elements['item-special-diet'].value = itemsList[itemID]["item_special_diet"];
+		});
+	} else {
+		$("#content #column-right #add-item").slideUp(300, function(){
+			$("#content #column-right #edit-item").slideDown(300);
+			document.forms['edit-item-form'].elements['item-pk'].value = itemID;
+			document.forms['edit-item-form'].elements['item-name'].value = itemsList[itemID]["item_name"];
+			document.forms['edit-item-form'].elements['item-desc'].value = itemsList[itemID]["item_desc"];
+			document.forms['edit-item-form'].elements['point-value'].value = itemsList[itemID]["item_point_value"];
+			document.forms['edit-item-form'].elements['allergen-info'].value = itemsList[itemID]["item_allergen_info"];
+			document.forms['edit-item-form'].elements['item-special-diet'].value = itemsList[itemID]["item_special_diet"];
+		});
+	}
+}
+
+function cancelEdit(editForm) {
+	if(editForm === "item"){
+		$("#content #column-right #edit-item").slideUp(300, function(){
+			$("#content #column-right #add-item").slideDown(300);
+		});
+	} else if(editForm === "location"){
+		$("#content #column-right #edit-location").slideUp(300, function(){
+			$("#content #column-right #add-location").slideDown(300);
+		});
+	}
+
+	return false;
+}
+
+function jsEditItem(formDataInput){
+	var json = {};
+
+	jQuery.each(formDataInput, function() {
+		json[this.name] = this.value || '';
+	});
+
+	var itemID = json["item-pk"];
+	
+	jQuery.ajax({
+		type: "POST",
+		url: "jsapi.php",
+		dataType: "json",
+
+		data: json,
+
+	    success: function (response) {
+	    	if(response["status"] === "ERROR"){
+	    		console.log(response);
+	    		alert(response["message"]);
+	    	} else {
+	    		cancelEdit("item");
+	    		addToItemList(response, "update", "admin");
+
+	    		//Repaint the locations/items divs to reflect changes to the items
+    			var locationKeys = [];
+    			$.each(locationsList, function() {
+    				locationKeys.push(this["location_pk"]);
+    			});
+    			getLocationsItems(locationKeys);
+
+    			$("#edit-item-form")[0].reset();
+	    	}
+		}		
+	});
+}
+
+function jsEditLocation(formDataInput){
 	alert(locationID);
 	return false;
 }
@@ -455,11 +554,38 @@ function jsDeleteLocation(locationID){
 	    		delete locationsList[locationID];
 
 	    		$("#location-key-" + locationID).slideUp(300, function() { 
-	    			$(this).remove(); 
+	    			$(this).remove();
 	    		});
 	    	}
 		}		
 	});
+}
+
+function jsDeleteLocationItem(locationID, itemID){
+
+	var json = {};
+
+	json["endpoint"] = "delete-location-item";
+	json["location_pk"] = locationID;
+	json["item_pk"] = itemID;
+
+	jQuery.ajax({
+		type: "POST",
+		url: "jsapi.php",
+		dataType: "json",
+
+		data: json,
+
+	    success: function (response) {
+	    	if(response["status"] === "ERROR"){
+	    		console.log(response);
+	    		alert(response["message"]);
+	    	} else {
+	    		getLocationsItems([locationID]);
+	    	}
+		}		
+	});	
+
 }
 
 var recursionCounter = 0;

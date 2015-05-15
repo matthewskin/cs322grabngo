@@ -72,6 +72,47 @@
                     <div id="horizontal-clear"></div>
                 </div>
 
+                <div id="edit-item">
+                    <h6>Edit Item</h6>
+                    <div id="horizontal-clear"></div>
+                    <form id="edit-item-form">
+                        <input type="hidden" name="endpoint" value="edit-item">                        
+                        <input type="hidden" name="item-pk" value="">
+                        <p>Item Name</p><input type="text" name="item-name"><br>
+                        <p>Description</p><input type="text" name="item-desc"><br>                    
+                        <p>Point Value</p>
+                        <select name="point-value">
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                            <option value="6">6</option>
+                            <option value="7">7</option>
+                            <option value="8">8</option>
+                            <option value="9">9</option>
+                            <option value="10">10</option>
+                            <option value="11">11</option>
+                            <option value="12">12</option>
+                            <option value="13">13</option>
+                            <option value="14">14</option>
+                            <option value="15">15</option>
+                            <option value="16">16</option>
+                        </select><br>
+                        <p>Allergen Information</p><input type="text" id="allergen-info" name="allergen-info" value="Contains: "><br>
+                        <p>Special Diet</p>
+                        <select name="item-special-diet" value="">
+                            <option selected value="none">None</option>
+                            <option value="vegetarian">Vegetarian</option>
+                            <option value="vegan">Vegan</option>
+                            <option value="gluten free">Gluten Free</option>                            
+                        </select><br>
+                        <input id="submit-button" type="button" onclick="return submitEditItemForm()" value="Update Item">
+                        <input id="submit-button" type="button" onclick="return cancelEdit('item')" value="Cancel">
+                    </form>
+                    <div id="horizontal-clear"></div>
+                </div>
+
                 <div id="add-location">
                     <h6>Add A Location</h6>
                     <div id="horizontal-clear"></div>
@@ -124,7 +165,7 @@
             $(document).on("click", ".edit-pencil-item", function(event) {
                 //Use helper function to get the id of the surrounding div then pass it to the function
                 var itemID = getElementID($(this), 10, "item-key-");
-                jsEditItem(itemID);
+                jsEditItemTab(itemID);
                 return false;
             });
 
@@ -175,6 +216,34 @@
                         $( this ).dialog( "close" );
                         $("#dialog-confirm").empty();
                         jsDeleteLocation(locationID);
+                        return false;
+                    },
+                    Cancel: function() {
+                      $( this ).dialog( "close" );
+                      $("#dialog-confirm").empty();
+                      return false;
+                    }
+                  }
+                });
+                return false;
+            });
+
+            $(document).on("click", ".delete-button-item-location", function(event) {
+                //Use helper function to get the id of the surrounding div then pass it to the function
+                var itemID = getElementID($(this), 10, "item-key-");
+                var locationID = getElementID($(this), 10, "location-key-");
+
+                $("#dialog-confirm").append("<p>Are you sure you would like to unlink this item from this location?</p>");
+
+                $( "#dialog-confirm" ).dialog({
+                  resizable: false,
+                  height:230,
+                  modal: true,
+                  buttons: {
+                    "Delete": function() {                        
+                        $( this ).dialog( "close" );
+                        $("#dialog-confirm").empty();
+                        jsDeleteLocationItem(locationID, itemID);
                         return false;
                     },
                     Cancel: function() {
