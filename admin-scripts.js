@@ -12,7 +12,10 @@ var pointTotal = 0;
 var pointsMax = 18;
 var swipesUsed = 1;
 // Points remaining on a swipe
-var pointsRemaining = pointsMax;
+var pointsRemaining = 18;
+
+var pointsDiff;
+var pointsItem;
 
 
 var selectedItems = [];
@@ -629,17 +632,51 @@ Array.prototype.remove = function() {
 };
 
 function addItemToCart(itemID){
-	pointTotal += Number(itemsList[itemID]["item_point_value"]);//This line is doing 2+4=24 I think
-	if (cartList[itemID] !== undefined) {
-		cartList[itemID]["count"] += 1;
-		//Increase value by 1
-		//cartList[itemID]["count"] = 1;
-		//Need to figure out how to add a number of items column for each item
+	pointsItem = Number(itemsList[itemID]["item_point_value"]);
+	pointTotal += pointsItem; //This line is doing 2+4=24 I think
+	if(pointsItem < pointsRemaining){
+		pointsRemaining = pointsRemaining - pointsItem;
+		if (cartList[itemID] !== undefined) {
+			cartList[itemID]["count"] += 1;
+			//Increase value by 1
+			//cartList[itemID]["count"] = 1;
+			//Need to figure out how to add a number of items column for each item
+		} else {
+			cartList[itemID] = itemsList[itemID];
+			cartList[itemID]["count"] = 1;
+		}
+		reloadCart();
+	} else if(pointsItem == pointsRemaining) {
+		pointsRemaining = 0;
+		if (cartList[itemID] !== undefined) {
+			cartList[itemID]["count"] += 1;
+			//Increase value by 1
+			//cartList[itemID]["count"] = 1;
+			//Need to figure out how to add a number of items column for each item
+		} else {
+			cartList[itemID] = itemsList[itemID];
+			cartList[itemID]["count"] = 1;
+		}
+		reloadCart();
+	} else if(swipesUsed < 4) {
+		pointsDiff = pointsItem - pointsRemaining;
+		swipesUsed = swipesUsed + 1;
+		pointsRemaining = pointsMax - pointsDiff;
+		
+		if (cartList[itemID] !== undefined) {
+			cartList[itemID]["count"] += 1;
+			//Increase value by 1
+			//cartList[itemID]["count"] = 1;
+			//Need to figure out how to add a number of items column for each item
+		} else {
+			cartList[itemID] = itemsList[itemID];
+			cartList[itemID]["count"] = 1;
+		}
+		reloadCart();
+		
 	} else {
-		cartList[itemID] = itemsList[itemID];
-		cartList[itemID]["count"] = 1;
+		alert("Cannot add item; insufficient points remaining.");
 	}
-	reloadCart();
 
 	//alert("Point total (test)=" + pointTotal);
 }
@@ -665,14 +702,21 @@ function reloadCart(){
 		/*
 		"<div class='item' id='" + htmlID + "'>
 			<div class='item-display'>
-				<p id='item-name'>" + this["item_name"] + "</p>
-				<p id='item-points'>" + this["item_point_value"] + "</p>
-				<p id='item-count'>" + this["count"] + "</p>
+				<span id='item-count'>" + this["count"] + "</span>
+				<span> x </span><span id='item-name'>" + this["item_name"] + "</span>
+				<span id='item-points' style='float:right'>" + this["item_point_value"] * this["count"] + "</span>
 			</div>
-		</div>";
+		</div>
+		<br />";
+		
 		
 		*/
-		$("#cart-loaded-items").append(cartItemsDiv);	
+		$("#cart-loaded-items").append(cartItemsDiv);
+		
+		// Update shopping cart information	
+		document.getElementById("points-remain").innerHTML = pointsRemaining;
+		document.getElementById("swipes-used").innerHTML = swipesUsed;
+		
 	});
 	
 }

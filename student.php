@@ -44,7 +44,7 @@
 				<div id="horizontal-clear"></div>
 				<br />
 				
-				<div>Points Remaining: <span id=points-remain">X</span><span style="float: right">X</span><span id="swipes-used" style="float: right">Swipe #</span></div>
+				<div>Points Remaining: <span id="points-remain">X</span><span id="swipes-used" style="float: right">X</span><span style="float: right">Swipe #</span></div>
 				<div id="horizontal-clear"></div>
 				<br />
 				
@@ -145,6 +145,11 @@
 
             //This function populates the item-list div with items
             //jsListItems("student");
+            
+            // Initially sets shopping cart information
+            document.getElementById("points-per").innerHTML = pointsMax;
+            document.getElementById("points-remaining").innerHTML = pointsRemain;
+            document.getElementById("swipes-used").innerHTML = swipesUsed;
      
         });         
     </script>
