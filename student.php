@@ -63,8 +63,8 @@
 	
 	<script>
 		function damn(){
-        		window.open('http://localhost:8888/cs322grabngo/rules.png');
-        	} 
+    		window.open('./rules.png');
+    	} 
 	</script>
 
     <script>
@@ -131,11 +131,7 @@
             $(document).on("click", ".item-display", function(event) {
                 $(this).parent().children(".item-info").slideToggle("100");
                 return false;
-            });
-            
-            function damn(){
-        	window.open('http://localhost:8888/cs322grabngo/rules.png');
-        }       
+            });     
 			
 			var locationName = "";
 			$( "select" ).change(function () {
