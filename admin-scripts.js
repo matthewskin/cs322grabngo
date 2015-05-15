@@ -696,7 +696,8 @@ function reloadCart(){
 		var htmlID = "item-key-" + this["item_pk"];
 
 		var cartItemsDiv = "<div class='item' id='" + htmlID + "'><div class='item-display'><span id='item-count'>" + this["count"] + "</span><span> x </span><span id='item-name'>" + 
-					this["item_name"] + "</span><span id='item-points' style='float:right'>" + this["item_point_value"] * this["count"] + "</span></div></div><br />";
+					this["item_name"] + "</span><span><img style='float: right' src='images/delete-button.png' height='18' width='18' alt='Delete Item' class='delete-item-cart-button'></img></span><span id='item-points' style='float:right'>" + this["item_point_value"] * this["count"] + 
+					"</span></div></div><br />";
 		
 		
 		/*
@@ -722,9 +723,9 @@ function reloadCart(){
 }
 
 function submitOrder(){
-	var orderStr = "Items: ";
+	var orderStr = "Items:\n";
 	$.each(cartList, function() {
-		orderStr = orderStr + " " + this["item_name"];
+		orderStr = orderStr + " " + this["count"] + " x " + this["item_name"] + "\n";
 	});
 	orderStr = orderStr + "\nPoints: " + pointTotal + " Swipes: " + swipesUsed;
 	alert(orderStr);
