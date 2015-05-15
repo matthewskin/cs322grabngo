@@ -38,8 +38,8 @@
 			<div id="horizontal-clear"></div>
 		
 			<div id="cart-items-list">
+			<center><input type="button" id="rules" onclick="damn()" value="Grab n Go rules" > </center>
 				<h6>Shopping Cart</h6>
-				
 				<div>Points / Swipe: <span id="points-per">X</span><span style="float: right">Max # Of Swipes: 4</span></div>
 				<div id="horizontal-clear"></div>
 				<br />
@@ -60,6 +60,12 @@
 			
 		</div>
 	</body>
+	
+	<script>
+		function damn(){
+        		window.open('http://localhost:8888/cs322grabngo/rules.png');
+        	} 
+	</script>
 
     <script>
 		$(document).ready(function() {
