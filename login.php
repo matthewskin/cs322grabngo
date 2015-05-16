@@ -6,40 +6,27 @@
 			
 			<div id="login">
 				<h1>Grab & Go Login</h1>
-				<form action='endlogin.php' method='post'>
-					<div id="login-form">						
-						Login as: 
-						<input id='101' type='radio' name='logintype' value='admin'><label for='101'>Administrator</label>
-						<input id='102' type='radio' name='logintype' value='student' checked><label for='102'>Student</label>				
-						<br>
-						Username: 
-						<input type='text' name='username'>				
-						<br>
-						Password: 
-						<input type='password' name='password'>				
-						<br>
-						<input type='submit' value='Login'>
-						
-						<?php
-							if(isset($_GET["login"])){
-								if($_GET["login"] == "invalid"){
-									echo "<p class='error'> Invalid Credentials </p>";
-								}
-							}
-						?>
-					</div>		
-				</form>
-
-				
-				
-				<div>
-				<a href="resetpassword.php">Reset Password</a><br>
-				</div>
-
-				<div>
-					<a href="test.php">Home Page</a><br>
+				<div id="sign-in-div">
+					<span id="signinButton">
+					  <span
+					    class="g-signin"
+					    data-callback="onSignInCallback"
+					    data-clientid="205228710307-93umoqcphkle8htt5rf1eh57ln566a51.apps.googleusercontent.com"
+					    data-cookiepolicy="single_host_origin"
+					    data-requestvisibleactions="http://schema.org/AddAction"
+					    data-scope="https://www.googleapis.com/auth/plus.login">
+					  </span>
+					</span>
+					<input id="logout-button" type="button" onclick="logoutGoogle()" value="Logout">
 				</div>
 			</div>			
 		</content>	
 	</body>
+	<script>
+		$(document).ready(function() {
+
+
+            
+        });		
+	</script>
 </html>
