@@ -10,23 +10,27 @@
 		<div id="menu">
 			<ul>
 			  <li><a id="menu-button-item" onclick="changeTab('Item'); return false;" href="">Items</a></li>
+			  <li><a id="menu-button-rules" target="_blank" href="./rules.png">Rules</a></li>
 			  <li id="menu-button-logout"><a href="login.php">Logout</a></li>
 			</ul>
 		</div>
 
 		<div id="column-left">
 			<div id="horizontal-clear"></div>
-		
-			<p>Locations</p>
-			<select name="location">
-				<option value=""></option>
-				<option value="Post Breakfast">Post Breakfast</option>
-				<option value="Post Lunch">Post Lunch</option>
-				<option value="Seymour Breakfast">Seymour Breakfast</option>
-				<option value="Seymour Lunch">Seymour Lunch</option>
-			</select>
-		   
 			<div id="items-list">
+				<select id="select-location" name="location">
+					<option value="" disabled selected>Select a Location</option>
+					<?php
+						$statement = "SELECT * from locations ORDER BY locations.location_name";
+    					$result = executeQuery($statement);
+
+    					while($row = $result->fetch_assoc()){
+					?>
+						<option value="<?php echo $row["location_pk"]; ?>"><?php echo $row["location_name"]; ?></option>
+					<?php
+						}
+					?>
+				</select>
 				<h5>Items</h5>
 				<div id="loaded-items"></div>
 			</div>
@@ -37,8 +41,7 @@
 		<div id="column-right">
 			<div id="horizontal-clear"></div>
 		
-			<div id="cart-items-list">
-			<center><input type="button" id="rules" onclick="damn()" value="Grab n Go rules" > </center>
+			<div id="cart-items-list">			
 				<h6>Shopping Cart</h6>
 				<div>Points / Swipe: <span id="points-per">X</span><span style="float: right">Max # Of Swipes: 4</span></div>
 				<div id="horizontal-clear"></div>
@@ -50,15 +53,19 @@
 				
 				<div id="cart-loaded-items"></div>
 				
-				<div id="dialog" title="Submit Order" style="display: none">
- 					<p>Are you sure you would like to submit this order?</p>
-				</div>
+				
 				<button type="button" id="submit-order">Submit Order</button>
 			</div>      
 			
 			<div id="horizontal-clear"></div>
 			
 		</div>
+		<div id="dialog" title="Submit Order" style="display: none">
+			<p>Are you sure you would like to submit this order?</p>
+		</div>
+		<div id="dialog-confirm" title="Confirm...">
+    
+    	</div>
 	</body>
 	
 	<script>
@@ -135,14 +142,45 @@
 			
 			var locationName = "";
 			$( "select" ).change(function () {
-				$("#items-list #loaded-items").empty();
-				var str = "";
-				$( "select option:selected" ).each(function() {
-				  str += $( this ).text() + " ";
-				});
-				locationName = str;
-				
-				getItemsFromLocation(locationName);
+				var location = $(this);
+
+				if(jQuery.isEmptyObject(cartList) === false){
+					$("#dialog-confirm").append("<p>All items in the cart will be lost...</p>");
+
+	                $( "#dialog-confirm" ).dialog({
+	                  resizable: false,
+	                  width: 400,
+	                  modal: true,
+	                  buttons: {
+	                    Confirm: function() {                        
+	                        $( this ).dialog( "close" );
+	                        $("#dialog-confirm").empty();
+	                        
+	                        cartList = {};
+	                        $("#cart-loaded-items").empty();
+	                        $("#items-list #loaded-items").empty();
+							
+							getItemsFromLocation(location.val());
+							getLocation(location.val());
+	                      
+	                      	return false;
+	                    },
+	                    Cancel: function() {
+	                      $( this ).dialog( "close" );
+	                      $("#dialog-confirm").empty();
+	                      location.val( studentSelectedLocation['location_pk'] );
+	                      return false;
+	                    }
+	                  }
+	                });
+				} else {
+					cartList = {};
+					$("#items-list #loaded-items").empty();
+					
+					getItemsFromLocation(location.val());
+					getLocation(location.val());
+				}
+
 			});
 
             //This function populates the item-list div with items
@@ -150,9 +188,8 @@
             
             // Initially sets shopping cart information
             document.getElementById("points-per").innerHTML = pointsMax;
-            document.getElementById("points-remaining").innerHTML = pointsRemain;
+            // document.getElementById("points-remaining").innerHTML = pointsRemain;
             document.getElementById("swipes-used").innerHTML = swipesUsed;
-     
         });         
     </script>
 </html>

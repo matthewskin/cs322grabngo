@@ -72,14 +72,15 @@
     }
 	
 	function getItemsFromLocation() {
-		$location_name = $_POST["location-name"];
-		$statement = "
-			SELECT *
-			FROM items, locations, itemlocationjoin
-			WHERE 1
-			AND locations.location_pk = itemlocationjoin.location_fk
-			AND itemlocationjoin.item_fk = items.item_pk
-			AND location_name = '" . $location_name . "' ORDER BY items.item_name";
+		$location_key = $_POST["location-pk"];
+		$statement = "SELECT * FROM items INNER JOIN itemlocationjoin ON items.item_pk = itemlocationjoin.item_fk WHERE itemlocationjoin.location_fk = '" . $location_key . "' ORDER BY items.item_name";
+		// $statement = "
+		// 	SELECT *
+		// 	FROM items, locations, itemlocationjoin
+		// 	WHERE 1
+		// 	AND locations.location_pk = itemlocationjoin.location_fk
+		// 	AND itemlocationjoin.item_fk = items.item_pk
+		// 	AND location_pk = '" . $location_key . "' ORDER BY items.item_name";
 		
 		$result = executeQuery($statement);
 
@@ -146,7 +147,9 @@
 		$location_name = htmlspecialchars(mysql_escape_string ($_POST["location-name"]));
 		$location_open_time = htmlspecialchars(mysql_escape_string ($_POST["location-open-time"]));
 		$location_close_time = $_POST["location-close-time"];
+		$location_points = $_POST["location-swipe-points"];
 		$location_info = htmlspecialchars(mysql_escape_string ($_POST["location-info"]));
+
 
 		if(strlen(trim($location_name)) < 1){
 			$executeQuery = 0;
@@ -157,9 +160,9 @@
 		}
 		
 		if($executeQuery == 1){
-			$statement = "INSERT INTO locations (location_name, location_time_open, location_time_closed, location_info) 
+			$statement = "INSERT INTO locations (location_name, location_time_open, location_time_closed, location_max_points, location_info) 
 				VALUES ('" . $location_name . "', '" . $location_open_time . 
-					"', '" . $location_close_time . "', '" . $location_info . "')";
+					"', '" . $location_close_time . "', '" . $location_points . "', '" . $location_info . "')";
 
 			$result = executeQuery($statement);
 
@@ -323,6 +326,57 @@
 		}
 	}
 
+	function editLocation(){
+		$location_key = $_POST["location-pk"];
+
+		$location_name = htmlspecialchars(mysql_escape_string ($_POST["location-name"]));
+		$location_open_time = htmlspecialchars(mysql_escape_string ($_POST["location-open-time"]));
+		$location_close_time = $_POST["location-close-time"];
+		$location_points = $_POST["location-swipe-points"];
+		$location_info = htmlspecialchars(mysql_escape_string ($_POST["location-info"]));		
+
+		if(strlen(trim($location_name)) < 1){
+			$executeQuery = 0;
+		}
+
+		if(strlen($location_info) < 1){
+			$location_info = "No additional information.";
+		}
+
+		$statement = "UPDATE locations SET 
+			locations.location_name = '" . $location_name . "', 
+			locations.location_time_open = '" . $location_open_time . "',
+			locations.location_time_closed = '" . $location_close_time . "',
+			locations.location_info = '" . $location_info . "',
+			locations.location_max_points = '" . $location_points . "' 
+			WHERE locations.location_pk = '" . $location_key . "'";
+
+		$result = executeQuery($statement);
+
+		if($result == false){
+			returnJSONError("Unable to update the selected location. " . $GLOBALS["dbconnection"]->error);
+			return false;
+		} else {
+			$location = executeQuery("SELECT * FROM locations WHERE location_pk = " . $location_key);
+			//Return new item to JS.
+			returnJSONResult($location);
+			return true;
+		}
+	}
+
+	function getLocation(){
+		$statement = "SELECT * from locations WHERE locations.location_pk = '" . $_POST["location-pk"] . "'";
+    	$result = executeQuery($statement);
+
+    	if($result == false){
+			returnJSONError("Unable to fetch location. Server Error. " . $GLOBALS["dbconnection"]->error);
+			return false;
+		} else {
+			returnJSONResult($result);
+			return true;
+		}
+	}
+
     switch ($_POST["endpoint"]) {
 	    case "list-items":
 	        listItems();
@@ -359,6 +413,9 @@
 			break;
     	case "delete-location-item":
     		deleteLocationItem();
+    		break;
+    	case "get-location":
+    		getLocation();
     		break;
     }
 ?>

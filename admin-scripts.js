@@ -4,15 +4,18 @@ Austen Lake
 
 var itemsList = {};
 var locationsList = {};
+var studentSelectedLocation = {};
 var cartList = {};
 
 var pointTotal = 0;
 // Points per swipe; determined by time of day
 // To add: make pointsMax determined by time of day or maybe bassed on location selected?
-var pointsMax = 18;
+var pointsMax = 0;
+var pointsRemaining = 0;
+
 var swipesUsed = 1;
 // Points remaining on a swipe
-var pointsRemaining = 18;
+
 
 var pointsDiff;
 var pointsItem;
@@ -25,9 +28,15 @@ function changeTab(mode){
 	if(mode === "Item"){
 		//Check to see if the items panel is already selected.
 		if($("#content #column-left #items-list").css("display") === "none"){
-			$("#content #column-right #add-location").slideUp(300, function(){
-				$("#content #column-right #add-item").slideDown(300);
-			});
+			if($("#content #column-right #edit-location").css("display") !== "none"){
+				$("#content #column-right #edit-location").slideUp(300, function(){
+					$("#content #column-right #add-item").slideDown(300);
+				});
+			} else {
+				$("#content #column-right #add-location").slideUp(300, function(){
+					$("#content #column-right #add-item").slideDown(300);
+				});
+			}
 			$("#content #column-left #locations-list").slideUp(300, function(){
 				$("#content #column-left #items-list").slideDown(300);
 			});
@@ -135,11 +144,11 @@ function addToLocationList(locations, mode){
 		locationKeys.push(this.location_pk);
 		var htmlID = "location-key-" + this.location_pk;		
 
-		if(mode === "new-location"){
+		if(mode === "new-location" || mode === "update"){
 			var location_div = "<div class='location' id='" + htmlID + "' style='display:none'><div class='location-display'><p id='location-name'>" + 
 				this.location_name + "</p><div id='location-times'><input type='time' readonly='readonly' value='" + this.location_time_open + "'> to " + 
 	            "<input type='time' readonly='readonly' value='" + this.location_time_closed + 
-	            "'></div><img src='./images/edit-pencil.png' alt='Edit' class='edit-pencil-location' /></div>" + 
+	            "'></div><div id='max-points'>" + this.location_max_points + " Pt(s)</div><img src='./images/edit-pencil.png' alt='Edit' class='edit-pencil-location' /></div>" + 
 	            "<div class='location-info'><div id='location-info-desc'><p>" + 
 	            this.location_info + "</p></div>" + 
 	            "<div id='location-info-options'><img src='./images/delete-button.png' alt='Delete' class='delete-button-location' /></div>" +
@@ -148,7 +157,7 @@ function addToLocationList(locations, mode){
 	    	var location_div = "<div class='location' id='" + htmlID + "'><div class='location-display'><p id='location-name'>" + 
 				this.location_name + "</p><div id='location-times'><input type='time' readonly='readonly' value='" + this.location_time_open + "'> to " + 
 	            "<input type='time' readonly='readonly' value='" + this.location_time_closed + 
-	            "'></div><img src='./images/edit-pencil.png' alt='Edit' class='edit-pencil-location' /></div>" + 
+	            "'></div><div id='max-points'>" + this.location_max_points + " Pt(s)</div><img src='./images/edit-pencil.png' alt='Edit' class='edit-pencil-location' /></div>" + 
 	            "<div class='location-info'><div id='location-info-desc'><p>" + 
 	            this.location_info + "</p></div>" + 
 	            "<div id='location-info-options'><img src='./images/delete-button.png' alt='Delete' class='delete-button-location' /></div>" +
@@ -163,7 +172,10 @@ function addToLocationList(locations, mode){
 		newLocation["location_time_open"] = this.location_time_open;
 		newLocation["location_time_closed"] = this.location_time_closed;
 		newLocation["location_info"] = this.location_info;
+		newLocation["location_max_points"] = this.location_max_points
 		newLocation["location_div"] = location_div;
+		newLocation["items"] = [];
+
 
 		locationsList[this.location_pk] = newLocation;
 		//-------------------------------------------------
@@ -172,6 +184,13 @@ function addToLocationList(locations, mode){
         	$("#" + htmlID).slideDown(250);
         } else if (mode === "loaded-locations"){
         	$("#loaded-locations").append(location_div);
+        } else if (mode === "update"){
+        	var oldLocation = $("#locations-list #loaded-locations #" + htmlID);
+        	oldLocation.after(location_div);
+        	oldLocation.slideUp(250, function() {
+        		oldLocation.remove();
+        		$("#locations-list #loaded-locations #" + htmlID).slideDown(250);
+        	});         	
         }
 
     });
@@ -278,7 +297,6 @@ function jsListItems(user){
 
 //Send a request to the server to create and return a location
 function jsAddLocation(formDataInput){
-	itemsList = {};
 	var json = {};
 
 	jQuery.each(formDataInput, function() {
@@ -422,6 +440,30 @@ function jsEditItemTab(itemID) {
 	}
 }
 
+function jsEditLocationTab(locationID) {
+	if($("#content #column-right #edit-location").css("display") !== "none"){
+		$("#content #column-right #edit-location").slideUp(300, function(){
+			$("#content #column-right #edit-location").slideDown(300);
+			document.forms['edit-location-form'].elements['location-pk'].value = locationID;
+			document.forms['edit-location-form'].elements['location-name'].value = locationsList[locationID]["location_name"];
+			document.forms['edit-location-form'].elements['location-open-time'].value = locationsList[locationID]["location_time_open"];
+			document.forms['edit-location-form'].elements['location-close-time'].value = locationsList[locationID]["location_time_closed"];
+			document.forms['edit-location-form'].elements['location-swipe-points'].value = locationsList[locationID]["location_max_points"];
+			document.forms['edit-location-form'].elements['location-info'].value = locationsList[locationID]["location_info"];
+		});
+	} else {
+		$("#content #column-right #add-location").slideUp(300, function(){
+			$("#content #column-right #edit-location").slideDown(300);
+			document.forms['edit-location-form'].elements['location-pk'].value = locationID;
+			document.forms['edit-location-form'].elements['location-name'].value = locationsList[locationID]["location_name"];
+			document.forms['edit-location-form'].elements['location-open-time'].value = locationsList[locationID]["location_time_open"];
+			document.forms['edit-location-form'].elements['location-close-time'].value = locationsList[locationID]["location_time_closed"];
+			document.forms['edit-location-form'].elements['location-swipe-points'].value = locationsList[locationID]["location_max_points"];
+			document.forms['edit-location-form'].elements['location-info'].value = locationsList[locationID]["location_info"];
+		});
+	}
+}
+
 function cancelEdit(editForm) {
 	if(editForm === "item"){
 		$("#content #column-right #edit-item").slideUp(300, function(){
@@ -474,16 +516,42 @@ function jsEditItem(formDataInput){
 }
 
 function jsEditLocation(formDataInput){
-	alert(locationID);
-	return false;
+	var json = {};
+
+	jQuery.each(formDataInput, function() {
+		json[this.name] = this.value || '';
+	});
+
+	console.log(json);
+	var locationID = json["location-pk"];
+	
+	jQuery.ajax({
+		type: "POST",
+		url: "jsapi.php",
+		dataType: "json",
+
+		data: json,
+
+	    success: function (response) {
+	    	if(response["status"] === "ERROR"){
+	    		console.log(response);
+	    		alert(response["message"]);
+	    	} else {
+	    		cancelEdit("location");
+	    		addToLocationList(response, "update");
+
+    			$("#edit-location-form")[0].reset();
+	    	}
+		}		
+	});
 }
 
-function getItemsFromLocation(locationName){
+function getItemsFromLocation(locationID){
 	json = {};
 
 	json["endpoint"] = "get-items-from-location";
-	json["location-name"] = locationName;
-
+	json["location-pk"] = locationID;
+	
 	jQuery.ajax({
 		type: "POST",
 		url: "jsapi.php",
@@ -498,6 +566,34 @@ function getItemsFromLocation(locationName){
 			} else {
 				console.log(response);
 				addToItemList(response, "loaded-items", "student");
+			}
+		}		
+	});
+}
+
+function getLocation(locationID){
+	json = {};
+
+	json["endpoint"] = "get-location";
+	json["location-pk"] = locationID;
+
+	jQuery.ajax({
+		type: "POST",
+		url: "jsapi.php",
+		dataType: "json",
+
+		data: json,
+
+		success: function (response) {
+			if(response["status"] === "ERROR"){
+				console.log(response);
+				alert(response["message"]);
+			} else {
+				console.log(response);
+				studentSelectedLocation = response[0];
+
+				pointsMax = pointsRemaining = response[0]["location_max_points"];
+				reloadCart();
 			}
 		}		
 	});
@@ -712,14 +808,12 @@ function reloadCart(){
 		
 		
 		*/
-		$("#cart-loaded-items").append(cartItemsDiv);
-		
-		// Update shopping cart information	
-		document.getElementById("points-remain").innerHTML = pointsRemaining;
-		document.getElementById("swipes-used").innerHTML = swipesUsed;
-		
+		$("#cart-loaded-items").append(cartItemsDiv);		
 	});
-	
+	// Update shopping cart information	
+	document.getElementById("points-remain").innerHTML = pointsRemaining;
+	document.getElementById("points-per").innerHTML = pointsMax;
+	document.getElementById("swipes-used").innerHTML = swipesUsed;
 }
 
 function submitOrder(){
@@ -729,6 +823,10 @@ function submitOrder(){
 	});
 	orderStr = orderStr + "\nPoints: " + pointTotal + " Swipes: " + swipesUsed;
 	alert(orderStr);
+}
+
+function clearShoppingCart(){
+
 }
 
 

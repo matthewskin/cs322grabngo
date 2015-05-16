@@ -159,10 +159,16 @@ ul {
 	box-sizing: border-box;         /* Opera/IE 8+ */
 }
 
+#content #column-left #select-location {
+	padding: 3px;
+	margin: 5px;
+}
+
 #content #column-left #items-list {
 	background-color: #FFFFFF;
 	width: 100%;
 	height: 100%;
+
 }
 
 #content #column-left #items-list .item {
@@ -322,7 +328,13 @@ ul {
 #content #column-left #locations-list .location-display #location-times {
 	display: inline-block;
 	margin-top: 8px;
-	width: 300px;
+	width: 294px;
+}
+
+#content #column-left #locations-list .location-display #max-points {
+	display: inline-block;
+	margin-top: 8px;
+	width: 70px;
 }
 
 #content #column-left #locations-list .location-display .edit-pencil-location {
@@ -509,6 +521,31 @@ ul {
 	margin: 3px 0 0 0;
 }
 
+#content #column-right #cart-items-list {
+	width: 100%;
+
+	padding: 4px;
+
+	background-color: white;
+
+
+
+	-webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
+	-moz-box-sizing: border-box;    /* Firefox, other Gecko */
+	box-sizing: border-box;         /* Opera/IE 8+ */
+
+	-webkit-border-radius: 2px;
+	-webkit-border-top-right-radius: 3px;
+	-moz-border-radius: 2px;
+	-moz-border-radius-topright: 3px;
+	border-radius: 2px;
+	border-top-right-radius: 3px;
+}	
+
+#content #column-right #cart-items-list #submit-order {
+	padding: 5px;
+}	
+
 #content #column-right #add-item {
 	width: 100%;
 
@@ -573,11 +610,32 @@ ul {
 	border-top-right-radius: 3px;
 }
 
-#content #column-right #add-location #location-open-time {
+#content #column-right #edit-location {
+	width: 100%;
+
+	padding: 4px;
+
+	background-color: white;
+
+	display: none;
+
+	-webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
+	-moz-box-sizing: border-box;    /* Firefox, other Gecko */
+	box-sizing: border-box;         /* Opera/IE 8+ */
+
+	-webkit-border-radius: 2px;
+	-webkit-border-top-right-radius: 3px;
+	-moz-border-radius: 2px;
+	-moz-border-radius-topright: 3px;
+	border-radius: 2px;
+	border-top-right-radius: 3px;
+}
+
+#content #column-right #location-open-time {
 	width: 105px;
 }
 
-#content #column-right #add-location #location-close-time {
+#content #column-right #location-close-time {
 	width: 105px;
 }
 

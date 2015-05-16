@@ -107,7 +107,7 @@
                             <option value="vegan">Vegan</option>
                             <option value="gluten free">Gluten Free</option>                            
                         </select><br>
-                        <input id="submit-button" type="button" onclick="return submitEditItemForm()" value="Update Item">
+                        <input id="submit-button" type="button" onclick="return submitEditItemForm()" value="Update">
                         <input id="submit-button" type="button" onclick="return cancelEdit('item')" value="Cancel">
                     </form>
                     <div id="horizontal-clear"></div>
@@ -120,12 +120,74 @@
                         <input type="hidden" name="endpoint" value="add-location">
                         <p>Location Name</p><input type="text" name="location-name"><br>
                         <p>Location Hours</p><input type="time" id="location-open-time" value="07:30:00" name="location-open-time">
-                        to<input type="time" id="location-close-time" value="14:30:00" name="location-close-time"><br>                    
+                        to<input type="time" id="location-close-time" value="14:30:00" name="location-close-time"><br>
+                        <p>Points/Swipe</p>  
+                        <select name="location-swipe-points">
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                            <option value="6">6</option>
+                            <option value="7">7</option>
+                            <option value="8">8</option>
+                            <option value="9">9</option>
+                            <option value="10">10</option>
+                            <option value="11">11</option>
+                            <option value="12">12</option>
+                            <option value="13">13</option>
+                            <option value="14">14</option>
+                            <option value="15">15</option>
+                            <option value="16">16</option>
+                            <option value="17">17</option>
+                            <option value="18">18</option>
+                            <option value="19">19</option>
+                            <option value="20">20</option>
+                        </select><br>                  
                         <p>Additional Information</p><input type="text" name="location-info"><br>
                         <input id="submit-button" type="button" onclick="return submitAddLocationForm()" value="Add Location">
                     </form>
                     <div id="horizontal-clear"></div>                    
-                </div>             
+                </div>     
+
+                <div id="edit-location">
+                    <h6>Edit A Location</h6>
+                    <div id="horizontal-clear"></div>
+                    <form id="edit-location-form">
+                        <input type="hidden" name="endpoint" value="edit-location">
+                        <input type="hidden" name="location-pk" value="">
+                        <p>Location Name</p><input type="text" name="location-name"><br>
+                        <p>Location Hours</p><input type="time" id="location-open-time" value="07:30:00" name="location-open-time">
+                        to<input type="time" id="location-close-time" value="14:30:00" name="location-close-time"><br>
+                        <p>Points/Swipe</p>  
+                        <select name="location-swipe-points">
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                            <option value="6">6</option>
+                            <option value="7">7</option>
+                            <option value="8">8</option>
+                            <option value="9">9</option>
+                            <option value="10">10</option>
+                            <option value="11">11</option>
+                            <option value="12">12</option>
+                            <option value="13">13</option>
+                            <option value="14">14</option>
+                            <option value="15">15</option>
+                            <option value="16">16</option>
+                            <option value="17">17</option>
+                            <option value="18">18</option>
+                            <option value="19">19</option>
+                            <option value="20">20</option>
+                        </select><br>                  
+                        <p>Additional Information</p><input type="text" name="location-info"><br>
+                        <input id="submit-button" type="button" onclick="return submitEditLocationForm()" value="Update">
+                        <input id="submit-button" type="button" onclick="return cancelEdit('location')" value="Cancel">
+                    </form>
+                    <div id="horizontal-clear"></div>    
+                </div>       
             </div>
             <div id="dialog" title="Select Item(s)">
             	<div id="location-items-list">
@@ -172,7 +234,7 @@
             $(document).on("click", ".edit-pencil-location", function(event) {
                 //Use helper function to get the id of the surrounding div then pass it to the function
                 var locationID = getElementID($(this), 10, "location-key-");
-                jsEditLocation(locationID);
+                jsEditLocationTab(locationID);
                 return false;
             });
 
