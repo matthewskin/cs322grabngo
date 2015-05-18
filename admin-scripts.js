@@ -778,21 +778,41 @@ function addItemToCart(itemID){
 }
 
 function deleteItemFromCart(itemID){
-	cartList[itemID] = "";
-	pointTotal -= Number(itemsList[itemID]["item_point_value"]);
-	//cartList[itemID]["count"] = 1;
-	reloadCart();
+	pointsItem = Number(itemsList[itemID]["item_point_value"]);
+	pointTotal = pointTotal - pointsItem;
+	
+	if((pointsMax - pointsRemaining) >= pointsItem){
+		pointsRemaining = pointsRemaining + pointsItem;
+		if(cartList[itemID]["count"] == 1){
+			delete(cartList[itemID]);
+		}
+		else {
+			cartList[itemID]["count"] = cartList[itemID]["count"] - 1;
+		}
+		reloadCart();
+	} else if((pointsMax - pointsRemaining) < pointsItem) {
+		pointsDiff = pointsItem - (pointsMax - pointsRemaining);
+		pointsRemaining = pointsDiff;
+		swipesUsed = swipesUsed - 1;
+		if(cartList[itemID]["count"] == 1){
+			delete(cartList[itemID]);
+		}
+		else {
+			cartList[itemID]["count"] = cartList[itemID]["count"] - 1;
+		}
+		reloadCart();
+	}
 }
 
 //Create cart divs from cartItems list
 function reloadCart(){
 	$("#cart-loaded-items").empty();
 	$.each(cartList, function() {
-				
+		
 		var htmlID = "item-key-" + this["item_pk"];
-
+		
 		var cartItemsDiv = "<div class='item' id='" + htmlID + "'><div class='item-display'><span id='item-count'>" + this["count"] + "</span><span> x </span><span id='item-name'>" + 
-					this["item_name"] + "</span><span><img style='float: right' src='images/delete-button.png' height='18' width='18' alt='Delete Item' class='delete-item-cart-button'></img></span><span id='item-points' style='float:right'>" + this["item_point_value"] * this["count"] + 
+					this["item_name"] + "</span><span><img style='float: right' src='images/delete-button.png' height='18' width='18' alt='Delete Item' class='delete-item-cart-button'></img></span><span id='item-points' style='float:right'>" + this["item_point_value"] + 
 					"</span></div></div><br />";
 		
 		
@@ -801,14 +821,14 @@ function reloadCart(){
 			<div class='item-display'>
 				<span id='item-count'>" + this["count"] + "</span>
 				<span> x </span><span id='item-name'>" + this["item_name"] + "</span>
-				<span id='item-points' style='float:right'>" + this["item_point_value"] * this["count"] + "</span>
+				<span><img style='float: right' src='images/delete-button.png' height='18' width='18' alt='Delete Item' class='delete-item-cart-button'></img></span>
+				<span id='item-points' style='float:right'>" + this["item_point_value"] + "</span>
 			</div>
 		</div>
 		<br />";
-		
-		
 		*/
-		$("#cart-loaded-items").append(cartItemsDiv);		
+		$("#cart-loaded-items").append(cartItemsDiv);
+			
 	});
 	// Update shopping cart information	
 	document.getElementById("points-remain").innerHTML = pointsRemaining;

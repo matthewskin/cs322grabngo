@@ -128,6 +128,12 @@
 				addItemToCart(itemID);
                 return false;
             });
+            
+            $(document).on("click", ".delete-item-cart-button", function(event) {
+            	var itemID = getElementID($(this), 10, "item-key-");
+            	deleteItemFromCart(itemID);
+            	return false;
+            });
 			
             $(document).on("click", ".item-display", function(event) {
                 $(this).parent().children(".item-info").slideToggle("100");

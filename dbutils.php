@@ -7,16 +7,19 @@
     $database = "CS322grabngo";
 
 	//For Windows
-    //$servername = "localhost";
-    //$username = "root";
-    //$password = "";
-    //$database = "CS322grabngo";
-
-	//For Macs (a.k.a Alan)
-	// $servername = "localhost";
-    // $username = "root";
-    // $password = "root";
-    // $database = "CS322grabngo";
+	/*
+    $servername = "localhost";
+    $username = "root";
+    $password = "";
+    $database = "CS322grabngo";
+	*/
+	//For Macs
+	/*
+	$servername = "localhost";
+    $username = "root";
+    $password = "root";
+    $database = "CS322grabngo";
+    */
 
 
     //----------------------------------Create Connection----------------------------//
