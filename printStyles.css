@@ -1,0 +1,60 @@
+body {
+	width: 100%;
+	height: 100%;
+
+	color: #333;
+
+	line-height: 1.3;
+	text-align: justify;
+	letter-spacing: 0;
+	font: 12pt Georgia, "Times New Roman", Times, serif;
+	font-size: 1em;
+
+	margin:0 0 0 0;
+
+}
+
+#print-page {
+	padding: 10px;
+}
+
+#horizontal-clear {
+	border-top: 1px solid #000;
+	width: 50%;
+}
+
+#cart-info {
+	margin-bottom: 30px;
+}
+
+#cart-items {
+	margin-top: 30px;
+}
+
+#cart-items #cart-item {
+	border: 1px solid rgba(230,230,230, 1.0);
+	margin-bottom: 10px;
+	padding-left: 15px;
+}
+
+#cart-items #cart-item #item-name {
+	display: inline-block;
+	width: 250px;
+}
+
+#cart-items #cart-item #item-point-value {
+	display: inline-block;
+	width: 120px;
+	text-align: right;
+	
+}
+
+#cart-items #cart-item #item-count {
+	display: inline-block;
+	width: 275px;
+}
+
+#cart-items #cart-item #item-description {
+	margin-left: 30px;
+}
+
