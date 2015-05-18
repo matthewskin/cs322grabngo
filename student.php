@@ -67,12 +67,6 @@
     
     	</div>
 	</body>
-	
-	<script>
-		function damn(){
-    		window.open('./rules.png');
-    	} 
-	</script>
 
     <script>
 		$(document).ready(function() {

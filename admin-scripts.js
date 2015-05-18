@@ -816,20 +816,31 @@ function reloadCart(){
 	document.getElementById("swipes-used").innerHTML = swipesUsed;
 }
 
+var submitOrderVariables = {};
 function submitOrder(){
 	var orderStr = "Items:\n";
 	$.each(cartList, function() {
 		orderStr = orderStr + " " + this["count"] + " x " + this["item_name"] + "\n";
 	});
 	orderStr = orderStr + "\nPoints: " + pointTotal + " Swipes: " + swipesUsed;
-	alert(orderStr);
+	
+	//Store variables needed to make printable cart
+	submitOrderVariables["locationName"] = studentSelectedLocation["location_name"];
+	submitOrderVariables["pointsUsed"] = pointsMax-pointsRemaining;
+	submitOrderVariables["pointsMax"] = pointsMax;
+	submitOrderVariables["pointsRemaining"] = pointsRemaining;
+	submitOrderVariables["swipesUsed"] = swipesUsed;
+	submitOrderVariables["cartItems"] = cartList;
+
+	window.open("./print.php");
 }
 
 function onSignInCallback(authResult){
 	if (authResult['status']['signed_in']) {
 		alert("Login Successful");
-		// Update the app to reflect a signed in user
-		// Hide the sign-in button now that the user is authorized, for example:
+		
+		
+
 		document.getElementById('signinButton').setAttribute('style', 'display: none');
 	} else {
 		// Update the app to reflect a signed out user
