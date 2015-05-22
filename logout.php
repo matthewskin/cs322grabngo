@@ -1,5 +1,8 @@
 <?php
-	
-	header("Location: login.php");
+	setcookie("username", "", time()-3600);
+	setcookie("password", "", time()-3600);
+	setcookie("account_type", "", time()-3600);
 
+	header("Location: login.php");
 ?>
+

@@ -1,35 +1,41 @@
 <?php
 	require_once("pageutils.php");
 	require_once("dbutils.php");
-	require_once("loginutils.php");
+	require_once("admin-utils.php");
 	
 	$conn = connect();
 
-	$user = $_POST["username"];
-	$pass = $_POST["password"];
-	$type = $_POST["logintype"];
+	$username = $_POST["username"];
+	$password = $_POST["password"];
 
-	setLoginCookie($conn, $user, $pass, $type);
+	$username = htmlspecialchars(mysql_real_escape_string($username));
+	$password = crypt($password, 'a8hd9j2');
 	
-	// We can't use the cookie variables because they won't be sent to the page without a refresh
-	// see: http://stackoverflow.com/questions/3230133/accessing-cookie-immediately-after-setcookie
-	$pass = getEncrypted($pass);
+	$statement="SELECT * FROM users WHERE user_email='$username' and user_password='$password'";
+	$result = executeQuery($statement);
+
+	$count = $result->num_rows;
 	
-	if (isValidLogin($conn, $user, $pass, $type)) {
-		if ($type == student) {
-			header("Location: student.php");
-		} else if ($type == admin){
-			header("Location: admin.php");
+	if($count==1){
+		$row = $result->fetch_assoc();
+		if($row['account_type'] == 1){
+			$expires = 1 * 1000 * 60 * 60 * 24;
+			setcookie("username", $username, time()+$expires);
+			setcookie("password", $password, time()+$expires);
+			setcookie("account_type", $row['account_type'], time()+$expires);
+
+			header("Location: http://cs.knox.edu/grabngo/student.php");
+		} else if($row['account_type'] == 2){
+			$expires = 1 * 1000 * 60 * 60 * 24;
+			setcookie("username", $username, time()+$expires);
+			setcookie("password", $password, time()+$expires);
+			setcookie("account_type", $row['account_type'], time()+$expires);
+
+			header("Location: http://cs.knox.edu/grabngo/admin.php");
 		} else {
-			echo " $user / $pass / $type
-			Login Failed!";
-		}
+			header("Location: http://cs.knox.edu/grabngo/login.php?login=invalid");
+		} 
 	} else {
-
-		header("Location: login.php?login=invalid");
+		header("Location: http://cs.knox.edu/grabngo/login.php?login=invalid");
 	}
-	createHeader("End Login", false, false);
-
-	$conn->close();
-	createFooter();
 ?>

@@ -858,8 +858,17 @@ function submitOrder(){
 function onSignInCallback(authResult){
 	if (authResult['status']['signed_in']) {
 		alert("Login Successful");
-		
-		
+		var request = gapi.client.plus.people.get({
+		  'userId' : 'me'
+		});
+
+		console.log(request)
+		// var profile = googleUser.getBasicProfile();
+		// console.log('ID: ' + profile.getId());
+		// console.log('Name: ' + profile.getName());
+		// console.log('Image URL: ' + profile.getImageUrl());
+		// console.log('Email: ' + profile.getEmail());
+		console.log(authResult);
 
 		document.getElementById('signinButton').setAttribute('style', 'display: none');
 	} else {
@@ -877,3 +886,11 @@ function logoutGoogle(){
     gapi.auth.signOut();
     window.location.href = "http://cs.knox.edu/grabngo/login.php";
 }	
+
+function onSignIn(googleUser) {
+  var profile = googleUser.getBasicProfile();
+  console.log('ID: ' + profile.getId());
+  console.log('Name: ' + profile.getName());
+  console.log('Image URL: ' + profile.getImageUrl());
+  console.log('Email: ' + profile.getEmail());
+}

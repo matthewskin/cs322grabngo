@@ -5,13 +5,16 @@
     */
     require_once("admin-utils.php");
 	require_once("header.php");
+	require_once("authenticate.php");
+
+	$auth = authenticate($_COOKIE['username'], $_COOKIE['password'], $_COOKIE['account_type'], 1);
 ?>
 
 		<div id="menu">
 			<ul>
 			  <li><a id="menu-button-item" onclick="changeTab('Item'); return false;" href="">Items</a></li>
 			  <li><a id="menu-button-rules" target="_blank" href="./rules.png">Rules</a></li>
-			  <li id="menu-button-logout"><a href="login.php">Logout</a></li>
+			  <li id="menu-button-logout"><a href="logout.php">Logout</a></li>
 			</ul>
 		</div>
 
