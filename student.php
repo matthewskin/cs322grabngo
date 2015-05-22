@@ -64,7 +64,7 @@
 			
 		</div>
 		<div id="dialog" title="Submit Order" style="display: none">
-			<p>Are you sure you would like to submit this order?</p>
+			<p><span id="submit-points-text-1"></span><span id="submit-points-remaining-points"></span><span id="submit-points-text-2"></span>Are you sure you would like to submit this order?</p>
 		</div>
 		<div id="dialog-confirm" title="Confirm...">
     
@@ -74,6 +74,11 @@
     <script>
 		$(document).ready(function() {
 			$(document).on("click", "#submit-order", function(event) {
+				if(pointsRemaining > 0){
+					document.getElementById("submit-points-text-1").innerHTML = "You have ";
+					document.getElementById("submit-points-remaining-points").innerHTML = pointsRemaining;
+					document.getElementById("submit-points-text-2").innerHTML = " points remaining on your current swipe. ";
+				}
 				$("#dialog").dialog({
 					modal: true,
 					draggable: true,
