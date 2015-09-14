@@ -3,7 +3,7 @@
     /*Database for cs.knox.edu*/
     $servername = "cs.knox.edu";
     $username = "root";
-    $password = "KnxRlz1837";
+    $password = ""; //Ask John Dooley for this information
     $database = "CS322grabngo";
 
 	//For Windows
